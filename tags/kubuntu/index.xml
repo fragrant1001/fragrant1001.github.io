@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>kubuntu on fragrant1001</title>
+        <link>https://fragrant1001.github.io/tags/kubuntu/</link>
+        <description>Recent content in kubuntu on fragrant1001</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-Hans</language>
+        <lastBuildDate>Thu, 13 May 2021 22:16:07 +0800</lastBuildDate><atom:link href="https://fragrant1001.github.io/tags/kubuntu/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Kubuntu</title>
+        <link>https://fragrant1001.github.io/post/2023/kubuntutricks/</link>
+        <pubDate>Thu, 13 May 2021 22:16:07 +0800</pubDate>
+        
+        <guid>https://fragrant1001.github.io/post/2023/kubuntutricks/</guid>
+        <description>&lt;img src="https://fragrant1001.github.io/post/2023/kubuntutricks/cover.jpg" alt="Featured image of post Kubuntu" /&gt;&lt;p&gt;剪切板、触摸板手势、ldx安装kali、乱码reset&lt;/p&gt;
+&lt;h2 id=&#34;内容copy到剪切板或者鼠标滚轮键&#34;&gt;内容copy到剪切板或者鼠标滚轮键&lt;/h2&gt;
+&lt;p&gt;安装软件&lt;code&gt;sudo apt install xsel xclip&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;将文件内容copy到剪切板&#34;&gt;将文件内容copy到剪切板&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;本地
+xsel -b &amp;lt; file
+OR
+xclip -sel c &amp;lt; file
+
+如果是登录其它linux机器需要在ssh的时候加上-X参数
+
+ssh -X xxx@xx.xx.xx.xx
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;将命令输出存储到剪切板&#34;&gt;将命令输出存储到剪切板&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;echo -n 111 | xsel -b
+cat /etc/passwd | xclip -sel c
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;将剪切板中的内容输出到文件&#34;&gt;将剪切板中的内容输出到文件&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;xsel -b -o &amp;gt;&amp;gt; file # -o 貌似可以省略
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;将文件内容或命令输出copy到鼠标滚轮键和将鼠标滚轮键中的内容输出到文件&#34;&gt;将文件内容或命令输出copy到鼠标滚轮键和将鼠标滚轮键中的内容输出到文件&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;将文件内容copy到鼠标滚轮键
+xsel &amp;lt; file
+OR
+xclip &amp;lt; file
+将命令输出copy到鼠标滚轮键
+echo -n 111 | xsel
+cat /etc/passwd | xclip
+
+将鼠标滚轮键中的内容输出到文件
+xsel &amp;gt;&amp;gt; file
+xclip &amp;gt;&amp;gt; file
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;touchpad-gestures&#34;&gt;touchpad gestures&lt;/h2&gt;
+&lt;p&gt;安装&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo gpasswd -a $USER input
+newgrp input
+sudo apt-get install libinput-tools
+sudo apt-get install ruby
+sudo gem install fusuma
+sudo apt-get install xdotool
+sudo gem install fusuma-plugin-tap fusuma-plugin-keypresss
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;自定义手势映射&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;mkdir -p ~/.config/fusuma        # create config directory
+vim ~/.config/fusuma/config.yml # edit config file.
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;支持的手势&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;swipe:
+&lt;ul&gt;
+&lt;li&gt;support 3:, 4: fingers&lt;/li&gt;
+&lt;li&gt;support left:, right:, up:, down: directions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;pinch:
+&lt;ul&gt;
+&lt;li&gt;support 2:, 3:, 4: fingers&lt;/li&gt;
+&lt;li&gt;support in:, out: directions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;rotate:
+&lt;ul&gt;
+&lt;li&gt;support 2:, 3:, 4: fingers&lt;/li&gt;
+&lt;li&gt;support clockwise:,counterclockwise: directions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我的手势&lt;code&gt;vim ~/.config/fusuma/config.yml&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;swipe:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  3:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    left:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key ctrl+shift+Tab&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    right:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key ctrl+Tab&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    up:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key ctrl+t&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      keypress:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        LEFTSHIFT:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key --clearmodifiers ctrl+shift+t&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    down:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key ctrl+w&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      keypress:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        LEFTSHIFT:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key --clearmodifiers ctrl+d&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  4:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    left:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key super+shift+Tab&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    right:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key super+Tab&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    up:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key super+a&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    down:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key super+a&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tap:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  4:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key alt+Tab&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pinch:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  2: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    in:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xdotool key ctrl+alt+a&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    out:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xdotool key ctrl+alt+a&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plugin:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  inputs:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    libinput_command_input:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      enable-tap: true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      verbose: true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;threshold:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  swipe: 0.5
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  pinch: 0.9
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;interval:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  swipe: 0.5
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  pinch: 0.5
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;开机自启&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/iberianpig/fusuma&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;iberianpig/fusuma&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ubuntu连接ssh后点击或者滚动鼠标都会出现乱码&#34;&gt;ubuntu连接ssh后点击或者滚动鼠标都会出现乱码&lt;/h2&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.jianshu.com/p/f5f026c0c822&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;SSH终端鼠标点击滚动出现乱码字符&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;输入&lt;code&gt;reset&lt;/code&gt;回车即可&lt;/p&gt;
+&lt;h2 id=&#34;kubuntu通过lxd安装kali桌面版虚拟机&#34;&gt;kubuntu通过lxd安装kali桌面版虚拟机&lt;/h2&gt;
+&lt;p&gt;安装dbus-x11,否则会打不开xfce4-panel&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo apt-get install dbus-x11
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;.bashrc 添加&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;export DISPLAY=:0
+cd ~
+export $(dbus-launch)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;宿主机直接运行即可
+&lt;code&gt;lxc exec gkali -- sudo -u kali -i xfce4-panel&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/kubuntutricks/2021-04-17-23-13-32.png&#34;
+	width=&#34;1680&#34;
+	height=&#34;727&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/kubuntutricks/2021-04-17-23-13-32_hu3cac17c82a2d071ec076e28d113bf528_208035_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/kubuntutricks/2021-04-17-23-13-32_hu3cac17c82a2d071ec076e28d113bf528_208035_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;231&#34;
+		data-flex-basis=&#34;554px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.kali.org/docs/containers/kalilinux-lxc-images/#gui-kali-lxd-container-on-ubuntu-host&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Kali Linux LXC/LXD Images | Kali Linux Documentation&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/devhackrahul/Kali-Linux-LXD&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;devhackrahul/Kali-Linux-LXD&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://askubuntu.com/questions/1005623/libdbusmenu-glib-warning-unable-to-get-session-bus-failed-to-execute-child&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;LIBDBUSMENU-GLIB-WARNING **: Unable to get session bus: Failed to execute child process &amp;quot;dbus-launch&amp;quot; (No such file or directory) while x-forwarding&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

